@@ -4,13 +4,14 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import Feather from "react-native-vector-icons/Feather";
 import CustomText from "./CustomText";
 import styled from "styled-components/native";
+import Sidebar from "./Sidebar";
 
 const Container = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 45px 15px 10px 15px;
   border-bottom-width: 0.5px;
   border-bottom-color: #d3d3d3;
   background-color: #fff;
@@ -36,6 +37,7 @@ const SearchInput = styled.TextInput`
 const Navbar = () => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSearch = () => {
     setShowSearch((prev) => !prev);
@@ -45,7 +47,12 @@ const Navbar = () => {
   return (
     <>
       <Container>
-        <FontAwesome6 name="bars-staggered" size={27} color="#333" />
+        <FontAwesome6
+          name="bars-staggered"
+          size={27}
+          color="#333"
+          onPress={() => setSidebarOpen(true)}
+        />
         <CustomText weight="500" style={{ fontSize: 30, color: "black" }}>
           Fashion
           <CustomText weight="500" style={{ fontSize: 30, color: "grey" }}>
@@ -71,6 +78,10 @@ const Navbar = () => {
           />
         </SearchContainer>
       )}
+      <Sidebar
+        visible={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
     </>
   );
 };

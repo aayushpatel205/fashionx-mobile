@@ -1,28 +1,41 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useState } from "react";
+import { Text } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import CustomText from "../../Components/CustomText";
 import styled from "styled-components/native";
 import Navbar from "../../Components/Navbar";
 import TabNavigation from "../../Components/TabNavigation";
-// <FontAwesome name="bars" size={30} color="#333" />
-
 
 const Container = styled.View`
+`;
+
+const ContentContainer = styled.View`
   flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Homepage = () => {
+  const [activeTab, setActiveTab] = useState("Home");
+
+  const renderScreen = () => {
+    switch (activeTab) {
+      case "Home":
+        return <Text>Home Screen Content</Text>;
+      case "Favourites":
+        return <Text>Favourites Screen Content</Text>;
+      case "Cart":
+        return <Text>Cart Screen Content</Text>;
+      case "Profile":
+        return <Text>Profile Screen Content</Text>;
+      default:
+        return <Text>Home Screen Content</Text>;
+    }
+  };
+
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1 , backgroundColor: "#fff"}}>
-        <Container>
-          <Navbar/>
-          <TabNavigation/>
-          {/* <CustomText weight="500" style={{ fontSize: 40, color: "red" }}>
-            Homepage
-          </CustomText> */}
-        </Container>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+        <Text>HHJHIIILILY</Text>
       </SafeAreaView>
     </SafeAreaProvider>
   );
