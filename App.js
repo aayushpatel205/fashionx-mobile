@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./src/Navigation/AuthStack";
+import { AppContextProvider } from "./src/Context/AppContext";
 import {
   useFonts,
   Outfit_100Thin,
@@ -31,8 +32,10 @@ export default function App() {
     return null;
   }
   return (
-    <NavigationContainer>
-      <AuthStack />
-    </NavigationContainer>
+    <AppContextProvider>
+      <NavigationContainer>
+        <AuthStack />
+      </NavigationContainer>
+    </AppContextProvider>
   );
 }

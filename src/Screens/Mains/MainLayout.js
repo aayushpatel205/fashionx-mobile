@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
 import Navbar from "../../Components/Navbar";
 import TabNavigation from "../../Components/TabNavigation";
@@ -8,6 +8,10 @@ import Signuppage from "../Auth/Signuppage";
 import Homepage from "./Homepage";
 import Favouritespage from "./Favouritespage";
 import Cartpage from "./Cartpage";
+import Profilepage from "./Profilepage";
+import { useAppData } from "../../Context/AppContext";
+import Collectionspage from "./Collectionspage";
+import Aboutuspage from "./Aboutuspage";
 
 const MainContainer = styled.View`
   flex: 1;
@@ -19,7 +23,7 @@ const ContentContainer = styled.View`
 `;
 
 const MainLayout = () => {
-  const [activeTab, setActiveTab] = useState("Home");
+  const { activeTab, setActiveTab } = useAppData();
 
   const renderScreen = () => {
     switch (activeTab) {
@@ -30,7 +34,11 @@ const MainLayout = () => {
       case "Cart":
         return <Cartpage />;
       case "Profile":
-        return <Text>Profile Screen Content</Text>;
+        return <Profilepage />;
+      case "Collections":
+        return <Collectionspage />;
+      case "AboutUs":
+        return <Aboutuspage />;
       default:
         return <Text>Home Screen Content</Text>;
     }

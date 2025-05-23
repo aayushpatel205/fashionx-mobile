@@ -31,7 +31,7 @@ const CheckoutButton = styled(TouchableOpacity)`
 const Cartpage = () => {
   return (
     <PageWrapper>
-      <Container contentContainerStyle={{ gap: 20, paddingBottom: 105 }}>
+      <Container contentContainerStyle={{ gap: 25, paddingBottom: 105 }}>
         <CustomText weight="600" style={{ fontSize: 40 }}>
           My Cart
         </CustomText>

@@ -6,6 +6,7 @@ import Signuppage from "../Screens/Auth/Signuppage";
 import MainLayout from "../Screens/Mains/MainLayout";
 import Favouritespage from "../Screens/Mains/Favouritespage";
 import Cartpage from "../Screens/Mains/Cartpage";
+import Collectionspage from "../Screens/Mains/Collectionspage";
 const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
@@ -21,6 +22,7 @@ const AuthStack = () => {
       <Stack.Screen name="Homepage" component={Homepage} />
       <Stack.Screen name="Favouritespage" component={Favouritespage} />
       <Stack.Screen name="Cartpage" component={Cartpage} />
+      <Stack.Screen name="Collectionpage" component={Collectionspage} />
     </Stack.Navigator>
   );
 };

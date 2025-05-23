@@ -67,8 +67,8 @@ const CartProductCard = () => {
       </InnerContainer>
       <MaterialCommunityIcons
         name="dots-vertical"
-        size={25}
-        color="#000"
+        size={22}
+        color="#808080"
         style={{ position: "absolute", right: 5, top: 13 }}
       />
     </Container>

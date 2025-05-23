@@ -31,11 +31,11 @@ const ProductScrollView = styled.ScrollView.attrs(() => ({
   bounces: true,
   decelerationRate: "fast",
   contentContainerStyle: {
-    gap: 20,
+    gap: 25,
     justifyContent: "center",
     alignItems: "center",
     marginTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 45,
   },
 }))``;
 

@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomText from "./CustomText";
+import { useNavigation } from "@react-navigation/native";
+import { useAppData } from "../Context/AppContext";
 
 const { width, height } = Dimensions.get("window");
 
@@ -51,6 +53,8 @@ const LogoutButton = styled(TouchableOpacity)`
 `;
 
 const Sidebar = ({ visible, onClose }) => {
+  const { activeTab, setActiveTab } = useAppData();
+  const navigation = useNavigation();
   const slideAnim = useRef(new Animated.Value(-width * 0.9)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
@@ -101,11 +105,10 @@ const Sidebar = ({ visible, onClose }) => {
           onPress={() => onClose()}
         />
 
-        <MenuItem
-          onPress={() => {
-            onClose();
-          }}
-        >
+        <MenuItem onPress={() => {
+          setActiveTab("Collections");
+          onClose();
+        }}>
           <MenuIcon name="folder-multiple-outline" />
           <CustomText weight="600" style={{ fontSize: 21, color: "#fff" }}>
             Collections
@@ -114,6 +117,7 @@ const Sidebar = ({ visible, onClose }) => {
 
         <MenuItem
           onPress={() => {
+            setActiveTab("AboutUs");
             onClose();
           }}
         >
