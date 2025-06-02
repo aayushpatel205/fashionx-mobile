@@ -3,8 +3,11 @@ import { Image } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "./CustomText";
 import Feather from "react-native-vector-icons/Feather";
+import { useAppData } from "../Context/AppContext";
 
-const CardContainer = styled.View`
+const CardContainer = styled.TouchableOpacity.attrs({
+  activeOpacity: 1,
+})`
   height: 300px;
   width: 175px;
   background-color: #fff;
@@ -49,13 +52,14 @@ const DetailsContainer = styled.View`
 `;
 
 const VerticalProductCard = () => {
+  const { setActiveTab } = useAppData();
   const handleIconPress = () => {
     console.log("Heart icon pressed!");
     // You can toggle favorite state or trigger animation here
   };
 
   return (
-    <CardContainer>
+    <CardContainer onPress={() => setActiveTab("Product")}>
       <ImageContainer>
         <ProductImage source={require("../../assets/p_img8.png")} />
         <IconWrapper onPress={handleIconPress}>

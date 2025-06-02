@@ -5,6 +5,7 @@ import { View } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import VerticalProductCard from "../../Components/VerticalProductCard";
+import HeroImage from "../../../assets/fashionx-homepage-black.jpg"
 
 const Overlay = styled.View`
   position: absolute;
@@ -29,7 +30,7 @@ const Homepage = () => {
         >
           <View style={{ height: 550 }}>
             <Image
-              source={require("../../../assets/fashionx-homepage-black.jpg")}
+              source={HeroImage}
               style={{ height: "100%", width: "100%" }}
             />
             <Overlay />

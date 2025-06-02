@@ -5,9 +5,10 @@ const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState("Home");
-
   return (
-    <AppContext.Provider value={{ activeTab, setActiveTab }}>
+    <AppContext.Provider
+      value={{ activeTab, setActiveTab }}
+    >
       {children}
     </AppContext.Provider>
   );

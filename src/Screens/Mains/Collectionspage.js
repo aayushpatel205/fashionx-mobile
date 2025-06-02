@@ -5,9 +5,10 @@ import TabNavigation from "../../Components/TabNavigation";
 import Navbar from "../../Components/Navbar";
 import { useAppData } from "../../Context/AppContext";
 import styled from "styled-components";
+import { useNavigation } from "@react-navigation/native";
 import { FontDisplay } from "expo-font";
 
-const CategoryContainer = styled.View`
+const CategoryContainer = styled.TouchableOpacity`
   width: 88%;
   height: 22%;
   display: flex;
@@ -38,10 +39,12 @@ const TextView = styled.View`
 `;
 
 const Collectionspage = () => {
-  const { activeTab, setActiveTab } = useAppData();
+  const navigation = useNavigation();
+  const { activeTab, setActiveTab } =
+    useAppData();
   const categoryArray = [
     {
-      category: "Men",
+      category: "Mens",
       image: require("../../../assets/about-us-image.avif"),
     },
     {
@@ -60,12 +63,17 @@ const Collectionspage = () => {
         alignItems: "center",
         backgroundColor: "#f5f5f5",
         gap: 15,
-        paddingVertical: 50
+        paddingVertical: 50,
       }}
     >
       {categoryArray?.map((element, index) => {
         return (
-          <CategoryContainer key={index}>
+          <CategoryContainer
+            key={index}
+            onPress={() => {
+              setActiveTab(element.category);
+            }}
+          >
             <View style={{ width: "50%", height: "100%" }}>
               <Image
                 source={element.image}
@@ -80,7 +88,6 @@ const Collectionspage = () => {
           </CategoryContainer>
         );
       })}
-      {/* Add content or components here */}
     </View>
   );
 };
