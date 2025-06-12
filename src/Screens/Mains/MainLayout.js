@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import Navbar from "../../Components/Navbar";
 import TabNavigation from "../../Components/TabNavigation";
 import styled from "styled-components/native";
@@ -10,6 +11,10 @@ import Collectionspage from "./Collectionspage";
 import Aboutuspage from "./Aboutuspage";
 import Dynamiccollectionspage from "./Dynamiccollectionspage";
 import Productpage from "./Productpage";
+import MyOrdersPage from "./MyOrdersPage";
+import OrderDetails from "./OrderDetails";
+import Personaldetailspage from "./Personaldetailspage";
+import Sidebar from "../../Components/Sidebar";
 
 const MainContainer = styled.View`
   flex: 1;
@@ -21,41 +26,78 @@ const ContentContainer = styled.View`
 `;
 
 const MainLayout = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { activeTab, setActiveTab } = useAppData();
+  const [allProducts, setAllProducts] = useState([]);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchText, setSearchText] = useState("");
 
   const renderScreen = () => {
-  const dynamicTabs = ["Mens", "Women", "Kids"];
+    useEffect(() => {
+      if (activeTab === "Product") {
+        setShowSearch(false);
+      }
+    }, [activeTab]);
 
-  if (dynamicTabs.includes(activeTab)) {
-    return <Dynamiccollectionspage />;
-  }
+    const dynamicTabs = ["Men", "Women", "Kids"];
 
-  switch (activeTab) {
-    case "Home":
-      return <Homepage />;
-    case "Favourites":
-      return <Favouritespage />;
-    case "Cart":
-      return <Cartpage />;
-    case "Profile":
-      return <Profilepage />;
-    case "Collections":
-      return <Collectionspage />;
-    case "AboutUs":
-      return <Aboutuspage />;
-    case "Product":
-      return <Productpage/>
-    default:
-      return "Hiiii";
-  }
-};
+    if (dynamicTabs.includes(activeTab)) {
+      return (
+        <Dynamiccollectionspage
+          allProducts={allProducts}
+          setAllProducts={setAllProducts}
+          showSearch={showSearch}
+          setShowSearch={setShowSearch}
+        />
+      );
+    }
+
+    switch (activeTab) {
+      case "Home":
+        return <Homepage />;
+      case "Favourites":
+        return <Favouritespage />;
+      case "Cart":
+        return <Cartpage />;
+      case "Profile":
+        return <Profilepage />;
+      case "Collections":
+        return <Collectionspage />;
+      case "AboutUs":
+        return <Aboutuspage />;
+      case "Product":
+        return (
+          <Productpage showSearch={showSearch} setShowSearch={setShowSearch} />
+        );
+      case "MyOrders":
+        return <MyOrdersPage />;
+      case "OrderDetails":
+        return <OrderDetails />;
+      case "PersonalDetails":
+        return <Personaldetailspage />;
+      default:
+        return null;
+    }
+  };
 
   return (
-    <MainContainer>
-      <Navbar />
-      <ContentContainer>{renderScreen()}</ContentContainer>
-      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-    </MainContainer>
+    <>
+      <MainContainer>
+        <Navbar
+          allProducts={allProducts}
+          setAllProducts={setAllProducts}
+          showSearch={showSearch}
+          setShowSearch={setShowSearch}
+          searchText={searchText}
+          setSearchText={setSearchText}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+        />
+        <ContentContainer>{renderScreen()}</ContentContainer>
+        <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      </MainContainer>
+      <Sidebar visible={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    </>
   );
 };
 

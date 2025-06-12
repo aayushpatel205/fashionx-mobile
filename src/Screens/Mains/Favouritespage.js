@@ -36,6 +36,7 @@ const ProductScrollView = styled.ScrollView.attrs(() => ({
     alignItems: "center",
     marginTop: 20,
     paddingBottom: 45,
+    paddingHorizontal: 20
   },
 }))``;
 

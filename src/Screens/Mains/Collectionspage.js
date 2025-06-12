@@ -44,7 +44,7 @@ const Collectionspage = () => {
     useAppData();
   const categoryArray = [
     {
-      category: "Mens",
+      category: "Men",
       image: require("../../../assets/about-us-image.avif"),
     },
     {

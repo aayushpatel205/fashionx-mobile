@@ -13,7 +13,7 @@ const SidebarContainer = styled(Animated.View)`
   position: absolute;
   top: 0;
   left: 0;
-  height: ${height}px;
+  height: 100%;
   width: ${width * 0.6}px;
   background-color: #020403;
   padding: 40px 20px 20px 20px;
@@ -27,7 +27,7 @@ const Backdrop = styled(Animated.View)`
   position: absolute;
   top: 0;
   left: 0;
-  height: ${height}px;
+  height: 100%;
   width: ${width}px;
   background-color: rgba(0, 0, 0, 0.7);
   z-index: 998;
@@ -96,7 +96,7 @@ const Sidebar = ({ visible, onClose }) => {
         </Backdrop>
       )}
 
-      <SidebarContainer style={{ transform: [{ translateX: slideAnim }] }}>
+      <SidebarContainer height={200} style={{ transform: [{ translateX: slideAnim }] }}>
         <Ionicons
           name="close"
           size={30}

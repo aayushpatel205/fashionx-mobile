@@ -5,11 +5,13 @@ import Feather from "react-native-vector-icons/Feather";
 import CustomText from "./CustomText";
 import styled from "styled-components/native";
 import Sidebar from "./Sidebar";
+import { getProductBySearch } from "../api/userApis";
+import { useAppData } from "../Context/AppContext";
 
 const Container = styled.View`
   width: 100%;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 28%;
   align-items: center;
   padding: 45px 15px 10px 15px;
   border-bottom-width: 0.5px;
@@ -34,10 +36,19 @@ const SearchInput = styled.TextInput`
   font-size: 16px;
 `;
 
-const Navbar = () => {
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchText, setSearchText] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const Navbar = ({
+  allProducts,
+  setAllProducts,
+  showSearch,
+  setShowSearch,
+  searchText,
+  setSearchText,
+  sidebarOpen,
+  setSidebarOpen,
+}) => {
+  const { activeTab, setActiveTab } = useAppData();
+
+  const [loading, setLoading] = useState(false);
 
   const toggleSearch = () => {
     setShowSearch((prev) => !prev);
@@ -60,12 +71,15 @@ const Navbar = () => {
           </CustomText>
         </CustomText>
 
-        <Feather
-          name={showSearch ? "x" : "search"}
-          size={30}
-          color="#333"
-          onPress={toggleSearch}
-        />
+        {(["Men", "Women", "Kids"].includes(activeTab)) && (
+          <Feather
+            style={{ position: "absolute", right: 15, top: 50 }}
+            name={showSearch ? "x" : "search"}
+            size={30}
+            color="#333"
+            onPress={toggleSearch}
+          />
+        )}
       </Container>
 
       {showSearch && (
@@ -75,13 +89,30 @@ const Navbar = () => {
             placeholderTextColor="#888"
             value={searchText}
             onChangeText={setSearchText}
+            onSubmitEditing={() => {
+              if (!searchText) return;
+              const getProductsBySearch = async () => {
+                try {
+                  const searchedProducts = [];
+                  setLoading(true);
+                  const response = await getProductBySearch(searchText);
+                  response?.data.data.map((element) => {
+                    return searchedProducts.push(element?.item);
+                  });
+                  setAllProducts(searchedProducts);
+                  setLoading(false);
+                } catch (error) {
+                  console.log("Error: ", error);
+                  setLoading(false);
+                }
+                setSearchText("");
+              };
+              getProductsBySearch();
+            }}
+            returnKeyType="search"
           />
         </SearchContainer>
       )}
-      <Sidebar
-        visible={sidebarOpen}
-        onClose={() => setSidebarOpen(false)}
-      />
     </>
   );
 };

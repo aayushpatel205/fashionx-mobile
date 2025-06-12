@@ -8,7 +8,7 @@ import { useAppData } from "../Context/AppContext";
 const CardContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 1,
 })`
-  height: 300px;
+  max-height: 340px;
   width: 175px;
   background-color: #fff;
   border-radius: 12px;
@@ -18,7 +18,7 @@ const CardContainer = styled.TouchableOpacity.attrs({
 `;
 
 const ImageContainer = styled.View`
-  height: 70%;
+  height: 65%;
 `;
 
 const ProductImage = styled.Image`
@@ -44,35 +44,44 @@ const IconWrapper = styled.TouchableOpacity`
 `;
 
 const DetailsContainer = styled.View`
-  height: 30%;
   display: flex;
   padding: 5px;
-  gap: 3px;
+  gap: 5px;
   width: 92%;
+  margin-top: 2px;
 `;
 
-const VerticalProductCard = () => {
-  const { setActiveTab } = useAppData();
+const VerticalProductCard = ({ element }) => {
+  const { setActiveTab , setActiveProduct } = useAppData();
   const handleIconPress = () => {
     console.log("Heart icon pressed!");
     // You can toggle favorite state or trigger animation here
   };
 
   return (
-    <CardContainer onPress={() => setActiveTab("Product")}>
+    <CardContainer
+      onPress={() => {
+        setActiveTab("Product");
+        setActiveProduct(element);
+      }}
+    >
       <ImageContainer>
-        <ProductImage source={require("../../assets/p_img8.png")} />
+        <ProductImage source={{ uri: element?.imgUrl }} />
         <IconWrapper onPress={handleIconPress}>
           <Feather name="heart" size={20} color="#6e6e6e" />
         </IconWrapper>
       </ImageContainer>
 
       <DetailsContainer>
-        <CustomText weight="600" style={{ fontSize: 18, color: "#6e6e6e" }}>
-          Men's Round Neck T-Shirt
+        <CustomText
+          numberOfLines={2}
+          weight="600"
+          style={{ fontSize: 18, color: "#6e6e6e" }}
+        >
+          {element?.productName}
         </CustomText>
         <CustomText weight="700" style={{ fontSize: 22, color: "#1a1a1a" }}>
-          $ 25.5
+          $ {element?.price - 0.01}
         </CustomText>
       </DetailsContainer>
     </CardContainer>
