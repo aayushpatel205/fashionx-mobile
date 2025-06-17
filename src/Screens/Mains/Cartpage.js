@@ -1,9 +1,12 @@
 import React from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import CartProductCard from "../../Components/CartProductCard";
 import LinearGradient from "react-native-linear-gradient";
+import { useUserData } from "../../Context/UserContext";
+import { useAppData } from "../../Context/AppContext";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 const PageWrapper = styled.View`
   flex: 1;
@@ -38,19 +41,65 @@ const CheckoutButton = styled(TouchableOpacity)`
   z-index: 2;
 `;
 
+const TotalAmountView = styled.View`
+  height: 60px;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 5px;
+`;
+
 const Cartpage = () => {
+  const { activeTab, setActiveTab } = useAppData();
+  const { userCartData, setUserCartData } = useUserData();
+
+  const totalAmount = userCartData?.reduce(
+    (acc, item) => acc + (item.price * item.quantity || 0),
+    0
+  );
+
   return (
     <PageWrapper>
       <Container contentContainerStyle={{ gap: 25, paddingBottom: 105 }}>
         <CustomText weight="600" style={{ fontSize: 40 }}>
           My Cart
         </CustomText>
-        <CartProductCard />
-        <CartProductCard />
-        <CartProductCard />
-        <CartProductCard />
-        <CartProductCard />
-        <CartProductCard />
+        {userCartData?.length === 0 ? (
+          <View
+            style={{
+              width: "100%",
+              marginTop: "50%",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <MaterialCommunityIcons
+              name="cart-remove"
+              size={50}
+              color="#242424"
+            />
+            <CustomText weight="600" style={{ fontSize: 33 }}>
+              The Cart is Empty
+            </CustomText>
+          </View>
+        ) : (
+          userCartData?.map((element, index) => {
+            return <CartProductCard key={index} element={element} />;
+          })
+        )}
+
+        {userCartData?.length !== 0 && (
+          <TotalAmountView>
+            <CustomText weight="600" style={{ fontSize: 20, color: "#a9a9a9" }}>
+              Total Amount:{"  "}
+            </CustomText>
+            <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
+              ${totalAmount}
+            </CustomText>
+          </TotalAmountView>
+        )}
       </Container>
 
       {/* White Gradient overlay */}
@@ -61,11 +110,13 @@ const Cartpage = () => {
       />
 
       {/* Checkout button */}
-      <CheckoutButton onPress={() => console.log("Proceed to Checkout")}>
-        <CustomText weight="600" style={{ fontSize: 20, color: "#fff" }}>
-          Proceed to Checkout
-        </CustomText>
-      </CheckoutButton>
+      {userCartData?.length !== 0 && (
+        <CheckoutButton onPress={() => setActiveTab("Checkout")}>
+          <CustomText weight="600" style={{ fontSize: 20, color: "#fff" }}>
+            Proceed to Checkout - ${totalAmount}
+          </CustomText>
+        </CheckoutButton>
+      )}
     </PageWrapper>
   );
 };

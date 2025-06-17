@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, TextInput } from "react-native";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import Feather from "react-native-vector-icons/Feather";
@@ -11,12 +11,13 @@ import { useAppData } from "../Context/AppContext";
 const Container = styled.View`
   width: 100%;
   flex-direction: row;
-  gap: 28%;
   align-items: center;
-  padding: 45px 15px 10px 15px;
+  gap: 28%;
+  padding: 0px 15px 10px 15px;
   border-bottom-width: 0.5px;
   border-bottom-color: #d3d3d3;
   background-color: #fff;
+  position: relative;
 `;
 
 const SearchContainer = styled.View`
@@ -54,6 +55,9 @@ const Navbar = ({
     setShowSearch((prev) => !prev);
     setSearchText("");
   };
+  useEffect(() => {
+    console.log(activeTab);
+  }, []);
 
   return (
     <>
@@ -71,9 +75,11 @@ const Navbar = ({
           </CustomText>
         </CustomText>
 
-        {(["Men", "Women", "Kids"].includes(activeTab)) && (
+        {(activeTab === "Men" ||
+          activeTab === "Women" ||
+          activeTab === "Kids") && (
           <Feather
-            style={{ position: "absolute", right: 15, top: 50 }}
+            style={{ position: "absolute", right: 15 , bottom: 15 }}
             name={showSearch ? "x" : "search"}
             size={30}
             color="#333"

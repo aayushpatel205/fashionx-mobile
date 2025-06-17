@@ -231,6 +231,7 @@ const Dynamiccollectionspage = ({
           contentContainerStyle={{
             paddingTop: 20,
             paddingHorizontal: 20,
+            paddingBottom: 15,
             flexDirection: "row",
             flexWrap: "wrap",
             gap: 20,

@@ -1,15 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, ScrollView } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import CustomText from "../../Components/CustomText";
 import { useAppData } from "../../Context/AppContext";
 import OrderPageCard from "../../Components/OrderPageCard";
+import { getUserOrders } from "../../api/userApis";
+import { useUserData } from "../../Context/UserContext";
 
 const MyOrdersPage = () => {
   const { activeTab, setActiveTab } = useAppData();
+  const { userData } = useUserData();
+  const [userOrders, setUserOrders] = useState([]);
+
+  const getMyOrders = async () => {
+    try {
+      const response = await getUserOrders(userData?.data.id);
+      console.log("Order recieved: ", response);
+      setUserOrders(response.orders);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getMyOrders();
+  }, [userData]);
 
   return (
-    <ScrollView 
+    <ScrollView
       style={{ flex: 1, padding: 10, backgroundColor: "#f5f5f5" }}
       contentContainerStyle={{ paddingBottom: 35 }}
       showsVerticalScrollIndicator={false}

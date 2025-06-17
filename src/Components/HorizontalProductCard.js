@@ -6,6 +6,8 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { getUserDetails } from "../api/userApis";
 import { deleteFromWishlist } from "../api/userApis";
 import { userUpdateDetails } from "../api/userApis";
+import { useUserData } from "../Context/UserContext";
+import { useAppData } from "../Context/AppContext";
 
 const IconWrapper = styled.TouchableOpacity`
   position: absolute;
@@ -24,7 +26,9 @@ const IconWrapper = styled.TouchableOpacity`
   elevation: 2;
 `;
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity.attrs({
+  activeOpacity: 1,
+})`
   position: relative;
   width: 100%;
   z-index: -10;
@@ -43,48 +47,56 @@ const InnerContainer = styled.View`
   gap: 10px;
 `;
 
-const HorizontalProductCard = () => {
+const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
+  const { userData, setWishlistIdArray, wishlistIdArray } = useUserData();
   const [isFavourite, setIsFavourite] = useState(false);
-  const getWishlistData = async () => {
-    const category = "wishlist";
-    const response = await getUserDetails(userData?.data.id, category);
-    const productIDArray = response?.data.userWishlist.map((item) => item._id);
-    // setWishlistData(response?.data.userWishlist);
-    productIDArray.includes(id) ? setIsFavourite(true) : setIsFavourite(false);
-  };
+  const { setActiveTab, setActiveProduct } = useAppData();
 
   useEffect(() => {
-    getWishlistData();
+    wishlistIdArray.includes(element?._id)
+      ? setIsFavourite(true)
+      : setIsFavourite(false);
   }, []);
   const toggleFavourite = async () => {
     try {
-      // if (isFavourite) {
-      //   const response = await deleteFromWishlist(
-      //     userData?.data.id,
-      //     productData?._id
-      //   );
-      //   console.log("Is removed !!", response);
-      // } else {
-      //   const response = await userUpdateDetails({
-      //     user_id: userData?.data.id,
-      //     product: productData,
-      //     isWishlist: true,
-      //   });
-      //   console.log("Is added !!", response);
-      // }
+      if (isFavourite) {
+        const response = await deleteFromWishlist(
+          userData?.data.id,
+          element?._id
+        );
+        setWishlistIdArray((prev) => prev.filter((id) => id !== element?._id));
+        setUserWishlist((prev) =>
+          prev.filter((item) => item?._id !== element?._id)
+        );
+
+        console.log("Is removed !!", response);
+      } else {
+        const response = await userUpdateDetails({
+          user_id: userData?.data.id,
+          product: element,
+          isWishlist: true,
+        });
+        console.log("Is added !!", response);
+        setWishlistIdArray([...wishlistIdArray, element?._id]);
+        setUserWishlist([...userWishlist, element]);
+      }
       setIsFavourite(!isFavourite);
     } catch (error) {
       console.log(error);
     }
-    // setIsFavourite(!isFavourite);
   };
 
   return (
     <View style={{ position: "relative", alignItems: "center", width: "100%" }}>
-      <Container>
-        <View style={{ width: "30%", height: "100%", borderWidth: 1 }}>
+      <Container
+        onPress={() => {
+          setActiveTab("Product");
+          setActiveProduct(element);
+        }}
+      >
+        <View style={{ width: "30%", height: "100%" }}>
           <Image
-            source={require("../../assets/test-fashion-image.webp")}
+            source={{ uri: element?.imgUrl }}
             style={{ width: "100%", height: "100%" }}
           />
         </View>
@@ -95,19 +107,19 @@ const HorizontalProductCard = () => {
               weight="600"
               style={{ fontSize: 18, width: "96%" }}
             >
-              Men's Round Neck T-Shirt egjjhgghjghg
+              {element?.productName}
             </CustomText>
             <CustomText weight="500" style={{ fontSize: 16, color: "grey" }}>
               Category:{" "}
               <CustomText weight="500" style={{ fontSize: 16, color: "#000" }}>
-                Topwear
+                {element?.category}
               </CustomText>
             </CustomText>
           </View>
 
           <View style={{ flexDirection: "row", gap: "20%" }}>
             <CustomText weight="600" style={{ fontSize: 20 }}>
-              $ 25.5
+              $ {element?.price}.00
             </CustomText>
             <CustomText weight="600" style={{ fontSize: 20 }}>
               <CustomText style={{ color: "#a9a9a9" }}>Qty:</CustomText> 4

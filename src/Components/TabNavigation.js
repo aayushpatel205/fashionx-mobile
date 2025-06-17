@@ -34,7 +34,7 @@ export default TabNavigation;
 const TabBar = styled.View`
   flex-direction: row;
   justify-content: space-around;
-  padding: 10px 0px 30px 0px;
+  padding: 10px 0px 15px 0px;
   border-top-width: 1px;
   border-color: #eaeaea;
   background-color: #fff;

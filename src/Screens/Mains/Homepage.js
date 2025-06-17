@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text, ScrollView , ActivityIndicator } from "react-native";
+import {
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  BackHandler,
+  View,
+  Alert,
+} from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { View } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import VerticalProductCard from "../../Components/VerticalProductCard";
 import HeroImage from "../../../assets/fashionx-homepage-black.jpg";
-import { getAllProducts } from "../../api/userApis";
+import { getAllProducts, getUserDetails } from "../../api/userApis";
+import { useUserData } from "../../Context/UserContext";
 
 const Overlay = styled.View`
   position: absolute;
@@ -21,6 +28,7 @@ const TextStyle = styled(CustomText)`
 `;
 
 const Homepage = () => {
+  const { userData, setUserData , setWishlistIdArray , wishlistIdArray } = useUserData();
   const [loading, setLoading] = useState(true);
   const [latestProducts, setLatestProducts] = useState([]);
   const getData = async () => {
@@ -34,9 +42,43 @@ const Homepage = () => {
       setLoading(false);
     }
   };
+
+  const getWishlistData = async () => {
+    try {
+      const category = "wishlist";
+      const response = await getUserDetails(userData?.data.id, category);
+      setLoading(false);
+      console.log("The wishlist is: ", response?.data.userWishlist);
+      const idArray = response?.data.userWishlist.map((item) => item._id);
+      setWishlistIdArray(idArray);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
+    const backAction = () => {
+      Alert.alert("Hold on!", "Do you want to exit the app?", [
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel",
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true; // prevent default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
     getData();
+    getWishlistData();
+    console.log("userData: ", userData);
+    return () => backHandler.remove(); // cleanup
   }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -67,7 +109,7 @@ const Homepage = () => {
             </CustomText>
             {loading ? (
               <ActivityIndicator
-                style={{marginTop: 20}}
+                style={{ marginTop: 20 }}
                 size={60}
                 color={"#000"}
               />

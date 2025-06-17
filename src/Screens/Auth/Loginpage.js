@@ -6,6 +6,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import styled from "styled-components/native";
 import { userLogin } from "../../api/userApis";
 import Toast from "react-native-toast-message";
+import { useUserData } from "../../Context/UserContext";
 
 const PasswordView = styled.View`
   background-color: #fff;
@@ -31,6 +32,7 @@ const Button = styled.TouchableOpacity`
   margin-top: 20px;
 `;
 const Loginpage = ({ navigation }) => {
+  const {userData , setUserData} = useUserData();
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
@@ -41,11 +43,10 @@ const Loginpage = ({ navigation }) => {
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
         <View style={{ flex: 1, backgroundColor: "#f5f5f5", padding: 10 }}>
-          <Ionicons name="chevron-back" size={40} color="black" />
           <View
             style={{
               padding: 20,
-              marginTop: 40,
+              marginTop: 50,
               flexDirection: "column",
               gap: 10,
             }}
@@ -118,19 +119,19 @@ const Loginpage = ({ navigation }) => {
                     userDetails.email,
                     userDetails.password
                   );
+                  setUserData({
+                    ...userData,
+                    isVerified: true,
+                    data: {
+                      name: response.data.user.name,
+                      email: response.data.user.email,
+                      token: response.data.token,
+                      id: response.data.user._id,
+                    },
+                    profilePicture: response?.data.user.profilePicture,
+                  });
                   alert(response?.data?.message);
-                  // setUserData({
-                  //   ...userData,
-                  //   isVerified: true,
-                  //   data: {
-                  //     name: response.data.user.name,
-                  //     email: response.data.user.email,
-                  //     token: response.data.token,
-                  //     id: response.data.user._id,
-                  //   },
-                  //   profilePicture: response?.data.user.profilePicture,
-                  // });
-                  navigation.navigate("Mainlayout");
+                  navigation.replace("Mainlayout");
                 } catch (error) {
                   alert(error?.response?.data?.message);
                 }

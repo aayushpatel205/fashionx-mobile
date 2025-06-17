@@ -1,10 +1,12 @@
-import React from "react";
-import { ScrollView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import HorizontalProductCard from "../../Components/HorizontalProductCard";
+import { useUserData } from "../../Context/UserContext";
+import { getUserDetails } from "../../api/userApis";
 
 const ScrollCategory = styled.View`
   padding: 7px 20px;
@@ -36,13 +38,40 @@ const ProductScrollView = styled.ScrollView.attrs(() => ({
     alignItems: "center",
     marginTop: 20,
     paddingBottom: 45,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
 }))``;
 
 const Favouritespage = () => {
+  const [userWishlist, setUserWishlist] = useState([]);
+  const { userData, wishlistIdArray, setWishlistIdArray } = useUserData();
+  const [loading, setLoading] = useState(true);
+
+  const getWishlistData = async () => {
+    try {
+      const category = "wishlist";
+      const response = await getUserDetails(userData?.data.id, category);
+      setLoading(false);
+      console.log("The wishlist is: ", response?.data.userWishlist);
+      setUserWishlist(response?.data.userWishlist);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getWishlistData();
+  }, []);
+
+  if (loading) {
+    return (
+      <ActivityIndicator style={{ marginTop: 100 }} size={60} color={"#000"} />
+    );
+  }
+
   return (
-    <View style={{ flex: 1 , backgroundColor: "#f5f5f5" }}>
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
       <CategoryView>
         <View>
           <CustomText weight="600" style={{ fontSize: 40 }}>
@@ -107,12 +136,14 @@ const Favouritespage = () => {
       </CategoryView>
 
       <ProductScrollView>
-        <HorizontalProductCard />
-        <HorizontalProductCard />
-        <HorizontalProductCard />
-        <HorizontalProductCard />
-        <HorizontalProductCard />
-        <HorizontalProductCard />
+        {userWishlist.map((item) => (
+          <HorizontalProductCard
+            setUserWishlist={setUserWishlist}
+            element={item}
+            userWishlist={userWishlist}
+            key={item._id}
+          />
+        ))}
       </ProductScrollView>
     </View>
   );

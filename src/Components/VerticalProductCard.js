@@ -1,9 +1,10 @@
-import React from "react";
-import { Image } from "react-native";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import CustomText from "./CustomText";
-import Feather from "react-native-vector-icons/Feather";
 import { useAppData } from "../Context/AppContext";
+import { userUpdateDetails, deleteFromWishlist } from "../api/userApis";
+import { useUserData } from "../Context/UserContext";
+import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 
 const CardContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 1,
@@ -18,7 +19,7 @@ const CardContainer = styled.TouchableOpacity.attrs({
 `;
 
 const ImageContainer = styled.View`
-  height: 65%;
+  height: 210px;
 `;
 
 const ProductImage = styled.Image`
@@ -52,9 +53,38 @@ const DetailsContainer = styled.View`
 `;
 
 const VerticalProductCard = ({ element }) => {
-  const { setActiveTab , setActiveProduct } = useAppData();
-  const handleIconPress = () => {
-    console.log("Heart icon pressed!");
+  const { userData, wishlistIdArray } = useUserData();
+  const [isFavourite, setIsFavourite] = useState();
+  const { setActiveTab, setActiveProduct } = useAppData();
+
+  useEffect(() => {
+    wishlistIdArray.includes(element?._id)
+      ? setIsFavourite(true)
+      : setIsFavourite(false);
+  }, []);
+
+  const handleIconPress = async () => {
+    try {
+      if (isFavourite) {
+        const response = await deleteFromWishlist(
+          userData?.data.id,
+          element?._id
+        );
+        wishlistIdArray.filter((id) => id !== element?._id);
+        console.log("Is removed !!", response);
+      } else {
+        const response = await userUpdateDetails({
+          user_id: userData?.data.id,
+          product: element,
+          isWishlist: true,
+        });
+        wishlistIdArray.push(element?._id);
+        // console.log("Is added !!", response);
+      }
+      setIsFavourite(!isFavourite);
+    } catch (error) {
+      console.log(error);
+    }
     // You can toggle favorite state or trigger animation here
   };
 
@@ -68,7 +98,12 @@ const VerticalProductCard = ({ element }) => {
       <ImageContainer>
         <ProductImage source={{ uri: element?.imgUrl }} />
         <IconWrapper onPress={handleIconPress}>
-          <Feather name="heart" size={20} color="#6e6e6e" />
+          <FontAwesome6
+            name={isFavourite ? "heart" : "heart"}
+            solid={isFavourite}
+            size={20}
+            color={isFavourite ? "red" : "#6e6e6e"}
+          />
         </IconWrapper>
       </ImageContainer>
 

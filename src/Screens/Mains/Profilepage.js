@@ -4,33 +4,49 @@ import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import Entypo from "react-native-vector-icons/Entypo";
 import { useAppData } from "../../Context/AppContext";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { useUserData } from "../../Context/UserContext";
 
 const Profilepage = () => {
   const { activeTab, setActiveTab } = useAppData();
+  const { userData, setUserData } = useUserData();
+  console.log(userData);
   return (
     <Container>
-      <CustomText weight="600" style={{ fontSize: 40 }}>
+      <CustomText weight="600" style={{ fontSize: 40, marginTop: 10 }}>
         My Profile
       </CustomText>
 
       <InnerContainer>
         <ImageWrapper>
-          <ProfileImage
-            source={require("../../../assets/test-fashion-image.webp")}
-            resizeMode="cover"
-          />
+          {userData?.data.profilePicture ? (
+            <ProfileImage
+              source={require("../../../assets/test-fashion-image.webp")}
+              resizeMode="cover"
+            />
+          ) : (
+            <FontAwesome name="user" size={45} color="#a9a9a9" />
+          )}
         </ImageWrapper>
-        <View>
-          <CustomText weight="600" style={{ fontSize: 28 }}>
-            Aayush Patel
+        <View style={{ width: "100%" }}>
+          <CustomText
+            numberOfLines={2}
+            weight="600"
+            style={{ fontSize: 26, width: "65%" }}
+          >
+            {userData?.data.name}
           </CustomText>
-          <CustomText weight="500" style={{ fontSize: 22, color: "#a9a9a9" }}>
-            aayush@gmail.com
+          <CustomText
+            numberOfLines={2}
+            weight="500"
+            style={{ fontSize: 21, color: "#a9a9a9", width: "65%" }}
+          >
+            {userData?.data.email}
           </CustomText>
         </View>
       </InnerContainer>
 
-      <OptionsContainer onPress={()=>setActiveTab("MyOrders")}>
+      <OptionsContainer onPress={() => setActiveTab("MyOrders")}>
         <CustomText
           weight="600"
           style={{ fontSize: 27, height: 50, paddingHorizontal: 20 }}
@@ -44,7 +60,7 @@ const Profilepage = () => {
           style={{ marginBottom: 10 }}
         />
       </OptionsContainer>
-      <OptionsContainer>
+      <OptionsContainer onPress={() => setActiveTab("PersonalDetails")}>
         <CustomText
           weight="600"
           style={{ fontSize: 27, height: 50, paddingHorizontal: 20 }}
@@ -87,8 +103,8 @@ const InnerContainer = styled.View`
 
 const ImageWrapper = styled.View`
   padding: 4px;
-  height: 95px;
-  width: 95px;
+  height: 90px;
+  width: 90px;
   border-radius: 60px;
   border: 3px solid #d3d3d3;
   justify-content: center;

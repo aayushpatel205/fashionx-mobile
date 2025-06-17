@@ -15,6 +15,8 @@ import MyOrdersPage from "./MyOrdersPage";
 import OrderDetails from "./OrderDetails";
 import Personaldetailspage from "./Personaldetailspage";
 import Sidebar from "../../Components/Sidebar";
+import { StatusBar } from "react-native";
+import Checkoutpage from "./Checkoutpage";
 
 const MainContainer = styled.View`
   flex: 1;
@@ -75,6 +77,8 @@ const MainLayout = () => {
         return <OrderDetails />;
       case "PersonalDetails":
         return <Personaldetailspage />;
+      case "Checkout":
+        return <Checkoutpage />;
       default:
         return null;
     }
@@ -82,6 +86,7 @@ const MainLayout = () => {
 
   return (
     <>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
       <MainContainer>
         <Navbar
           allProducts={allProducts}
