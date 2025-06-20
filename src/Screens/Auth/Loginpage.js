@@ -24,7 +24,7 @@ const InputBox = styled.TextInput`
   border-radius: 10px;
 `;
 
-const Button = styled.TouchableOpacity`
+export const Button = styled.TouchableOpacity`
   background-color: #000;
   padding: 14px;
   border-radius: 30px;

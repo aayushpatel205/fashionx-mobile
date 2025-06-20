@@ -10,6 +10,8 @@ import { getProductByCategory } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import { deleteFromWishlist, userUpdateDetails } from "../../api/userApis";
+import { CheckoutButton } from "./Cartpage";
+
 
 const Productpage = ({ showSearch, setShowSearch }) => {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -389,6 +391,10 @@ const CartButton = styled(TouchableOpacity)`
   border-radius: 50px;
   align-items: center;
   justify-content: center;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 10px;
   elevation: 5;
 `;
 

@@ -14,6 +14,7 @@ import VerticalProductCard from "../../Components/VerticalProductCard";
 import HeroImage from "../../../assets/fashionx-homepage-black.jpg";
 import { getAllProducts, getUserDetails } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
+import CreditCardInput from "../../Components/CreditCardInput";
 
 const Overlay = styled.View`
   position: absolute;
@@ -48,8 +49,7 @@ const Homepage = () => {
       const category = "wishlist";
       const response = await getUserDetails(userData?.data.id, category);
       setLoading(false);
-      console.log("The wishlist is: ", response?.data.userWishlist);
-      const idArray = response?.data.userWishlist.map((item) => item._id);
+      const idArray = response?.userWishlist.map((item) => item._id);
       setWishlistIdArray(idArray);
     } catch (error) {
       console.log(error);
@@ -81,7 +81,7 @@ const Homepage = () => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff"}}>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={{ height: 550 }}>
             <Image

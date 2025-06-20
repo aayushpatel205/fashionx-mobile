@@ -51,9 +51,10 @@ const Favouritespage = () => {
     try {
       const category = "wishlist";
       const response = await getUserDetails(userData?.data.id, category);
+      console.log("response: ", response);
       setLoading(false);
-      console.log("The wishlist is: ", response?.data.userWishlist);
-      setUserWishlist(response?.data.userWishlist);
+      console.log("The wishlist is: ", response?.userWishlist);
+      setUserWishlist(response?.userWishlist);
     } catch (error) {
       console.log(error);
       setLoading(false);

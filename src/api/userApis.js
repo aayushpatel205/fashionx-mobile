@@ -77,12 +77,13 @@ export const userLogout = async () => {
 };
 
 export const userUpdate = async (userDetails) => {
+  console.log("userDetails", userDetails);
   try {
     const response = await axiosInstance.patch(
       "/user/update/personal-details",
       userDetails
     );
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -105,7 +106,7 @@ export const getUserDetails = async (id, category) => {
     const response = await axiosInstance.get("/user/details", {
       params: params,
     });
-    return response;
+    return response.data;
   } catch (error) {
     throw error;
   }

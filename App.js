@@ -1,6 +1,5 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { SheetProvider } from "react-native-actions-sheet";
 import AuthStack from "./src/Navigation/AuthStack";
 import { AppContextProvider } from "./src/Context/AppContext";
 import { UserContextProvider } from "./src/Context/UserContext";

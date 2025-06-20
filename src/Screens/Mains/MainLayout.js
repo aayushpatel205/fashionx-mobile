@@ -17,6 +17,8 @@ import Personaldetailspage from "./Personaldetailspage";
 import Sidebar from "../../Components/Sidebar";
 import { StatusBar } from "react-native";
 import Checkoutpage from "./Checkoutpage";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import PaymentResultPage from "./PaymentResultPage";
 
 const MainContainer = styled.View`
   flex: 1;
@@ -79,6 +81,8 @@ const MainLayout = () => {
         return <Personaldetailspage />;
       case "Checkout":
         return <Checkoutpage />;
+      case "PaymentResult":
+        return <PaymentResultPage/>
       default:
         return null;
     }
@@ -86,21 +90,25 @@ const MainLayout = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
-      <MainContainer>
-        <Navbar
-          allProducts={allProducts}
-          setAllProducts={setAllProducts}
-          showSearch={showSearch}
-          setShowSearch={setShowSearch}
-          searchText={searchText}
-          setSearchText={setSearchText}
-          sidebarOpen={sidebarOpen}
-          setSidebarOpen={setSidebarOpen}
-        />
-        <ContentContainer>{renderScreen()}</ContentContainer>
-        <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      </MainContainer>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+          <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+          <MainContainer>
+            <Navbar
+              allProducts={allProducts}
+              setAllProducts={setAllProducts}
+              showSearch={showSearch}
+              setShowSearch={setShowSearch}
+              searchText={searchText}
+              setSearchText={setSearchText}
+              sidebarOpen={sidebarOpen}
+              setSidebarOpen={setSidebarOpen}
+            />
+            <ContentContainer>{renderScreen()}</ContentContainer>
+            <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+          </MainContainer>
+        </SafeAreaView>
+      </SafeAreaProvider>
       <Sidebar visible={sidebarOpen} onClose={() => setSidebarOpen(false)} />
     </>
   );

@@ -28,7 +28,7 @@ const GradientOverlay = styled(LinearGradient)`
   z-index: 1;
 `;
 
-const CheckoutButton = styled(TouchableOpacity)`
+export const CheckoutButton = styled(TouchableOpacity)`
   position: absolute;
   bottom: 15px;
   left: 20px;
@@ -39,6 +39,11 @@ const CheckoutButton = styled(TouchableOpacity)`
   justify-content: center;
   border-radius: 50px;
   z-index: 2;
+  shadow-color: #000;
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 10px;
+  elevation: 5;
 `;
 
 const TotalAmountView = styled.View`
