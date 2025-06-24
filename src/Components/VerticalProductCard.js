@@ -5,6 +5,7 @@ import { useAppData } from "../Context/AppContext";
 import { userUpdateDetails, deleteFromWishlist } from "../api/userApis";
 import { useUserData } from "../Context/UserContext";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
+import Toast from "react-native-toast-message";
 
 const CardContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 1,
@@ -71,7 +72,10 @@ const VerticalProductCard = ({ element }) => {
           element?._id
         );
         wishlistIdArray.filter((id) => id !== element?._id);
-        console.log("Is removed !!", response);
+        Toast.show({
+          type: "errorToast",
+          text1: "Removed from favourites",
+        });
       } else {
         const response = await userUpdateDetails({
           user_id: userData?.data.id,
@@ -79,7 +83,10 @@ const VerticalProductCard = ({ element }) => {
           isWishlist: true,
         });
         wishlistIdArray.push(element?._id);
-        // console.log("Is added !!", response);
+        Toast.show({
+          type: "successToast",
+          text1: "Added to favourites",
+        });
       }
       setIsFavourite(!isFavourite);
     } catch (error) {

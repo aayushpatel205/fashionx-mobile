@@ -172,6 +172,7 @@ export const addToOrder = async (userData, order) => {
     const response = await axiosInstance.post("/user/add-to-order", body);
     return response;
   } catch (error) {
+    console.log("error: ", error);
     throw error;
   }
 };

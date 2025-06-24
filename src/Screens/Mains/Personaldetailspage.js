@@ -4,6 +4,7 @@ import CustomText from "../../Components/CustomText";
 import styled from "styled-components";
 import { userUpdate, getUserDetails } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
+import Toast from "react-native-toast-message";
 
 const InputBox = styled.TextInput`
   background-color: #fff;
@@ -101,7 +102,10 @@ const Personaldetailspage = () => {
         phoneNumber: response.user.phoneNumber,
       }));
     } catch (error) {
-      console.error("Error fetching user details: ", error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error fetching details",
+      });
     }
   };
 

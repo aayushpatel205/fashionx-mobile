@@ -14,7 +14,7 @@ import VerticalProductCard from "../../Components/VerticalProductCard";
 import HeroImage from "../../../assets/fashionx-homepage-black.jpg";
 import { getAllProducts, getUserDetails } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
-import CreditCardInput from "../../Components/CreditCardInput";
+import Toast from "react-native-toast-message";
 
 const Overlay = styled.View`
   position: absolute;
@@ -29,7 +29,7 @@ const TextStyle = styled(CustomText)`
 `;
 
 const Homepage = () => {
-  const { userData, setUserData , setWishlistIdArray , wishlistIdArray } = useUserData();
+  const { userData, setWishlistIdArray } = useUserData();
   const [loading, setLoading] = useState(true);
   const [latestProducts, setLatestProducts] = useState([]);
   const getData = async () => {
@@ -39,7 +39,10 @@ const Homepage = () => {
       setLatestProducts(response.data.slice(length - 5, length));
       setLoading(false);
     } catch (error) {
-      console.log("error: ", error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error fetching products",
+      });
       setLoading(false);
     }
   };
@@ -52,7 +55,10 @@ const Homepage = () => {
       const idArray = response?.userWishlist.map((item) => item._id);
       setWishlistIdArray(idArray);
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error fetching favourites",
+      });
       setLoading(false);
     }
   };
@@ -75,13 +81,12 @@ const Homepage = () => {
     );
     getData();
     getWishlistData();
-    console.log("userData: ", userData);
     return () => backHandler.remove(); // cleanup
   }, []);
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff"}}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
           <View style={{ height: 550 }}>
             <Image

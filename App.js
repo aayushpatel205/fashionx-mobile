@@ -15,6 +15,8 @@ import {
   Outfit_800ExtraBold,
   Outfit_900Black,
 } from "@expo-google-fonts/outfit";
+import Toast from "react-native-toast-message";
+import toastConfig from "./toastConfig.js";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -33,12 +35,15 @@ export default function App() {
     return null;
   }
   return (
-    <UserContextProvider>
-      <AppContextProvider>
-        <NavigationContainer>
-          <AuthStack />
-        </NavigationContainer>
-      </AppContextProvider>
-    </UserContextProvider>
+    <>
+      <UserContextProvider>
+        <AppContextProvider>
+          <NavigationContainer>
+            <AuthStack />
+            <Toast config={toastConfig} />
+          </NavigationContainer>
+        </AppContextProvider>
+      </UserContextProvider>
+    </>
   );
 }

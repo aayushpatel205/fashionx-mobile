@@ -7,6 +7,7 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import HorizontalProductCard from "../../Components/HorizontalProductCard";
 import { useUserData } from "../../Context/UserContext";
 import { getUserDetails } from "../../api/userApis";
+import Toast from "react-native-toast-message";
 
 const ScrollCategory = styled.View`
   padding: 7px 20px;
@@ -51,12 +52,13 @@ const Favouritespage = () => {
     try {
       const category = "wishlist";
       const response = await getUserDetails(userData?.data.id, category);
-      console.log("response: ", response);
       setLoading(false);
-      console.log("The wishlist is: ", response?.userWishlist);
       setUserWishlist(response?.userWishlist);
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error fetching favourites",
+      });
       setLoading(false);
     }
   };

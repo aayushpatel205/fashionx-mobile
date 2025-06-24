@@ -8,6 +8,7 @@ import { deleteFromWishlist } from "../api/userApis";
 import { userUpdateDetails } from "../api/userApis";
 import { useUserData } from "../Context/UserContext";
 import { useAppData } from "../Context/AppContext";
+import Toast from "react-native-toast-message";
 
 const IconWrapper = styled.TouchableOpacity`
   position: absolute;
@@ -50,7 +51,8 @@ const InnerContainer = styled.View`
 const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
   const { userData, setWishlistIdArray, wishlistIdArray } = useUserData();
   const [isFavourite, setIsFavourite] = useState(false);
-  const { setActiveTab, setActiveProduct } = useAppData();
+  const { activeTab, setActiveTab, setActiveProduct } = useAppData();
+  console.log(activeTab);
 
   useEffect(() => {
     wishlistIdArray.includes(element?._id)
@@ -69,14 +71,20 @@ const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
           prev.filter((item) => item?._id !== element?._id)
         );
 
-        console.log("Is removed !!", response);
+        Toast.show({
+          type: "errorToast",
+          text1: "Removed from favourites",
+        });
       } else {
         const response = await userUpdateDetails({
           user_id: userData?.data.id,
           product: element,
           isWishlist: true,
         });
-        console.log("Is added !!", response);
+        Toast.show({
+          type: "successToast",
+          text1: "Added to favourites",
+        });
         setWishlistIdArray([...wishlistIdArray, element?._id]);
         setUserWishlist([...userWishlist, element]);
       }
@@ -109,33 +117,44 @@ const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
             >
               {element?.productName}
             </CustomText>
-            <CustomText weight="500" style={{ fontSize: 16, color: "grey" }}>
+            <CustomText weight="500" style={{ fontSize: 17, color: "grey" }}>
               Category:{" "}
-              <CustomText weight="500" style={{ fontSize: 16, color: "#000" }}>
+              <CustomText weight="500" style={{ fontSize: 17, color: "#000" }}>
                 {element?.category}
               </CustomText>
             </CustomText>
           </View>
 
-          <View style={{ flexDirection: "row", gap: "20%" }}>
+          <View style={{ flexDirection: "row", gap: "35%" }}>
             <CustomText weight="600" style={{ fontSize: 20 }}>
               $ {element?.price}.00
             </CustomText>
-            <CustomText weight="600" style={{ fontSize: 20 }}>
-              <CustomText style={{ color: "#a9a9a9" }}>Qty:</CustomText> 4
-            </CustomText>
+
+            {activeTab === "OrderDetails" && (
+              <CustomText
+                weight="600"
+                style={{ fontSize: 20, color: "#a9a9a9" }}
+              >
+                Qty:{" "}
+                <CustomText weight="600" style={{ color: "#000" }}>
+                  {element?.quantity}
+                </CustomText>
+              </CustomText>
+            )}
           </View>
         </InnerContainer>
       </Container>
 
-      <IconWrapper onPress={toggleFavourite}>
-        <FontAwesome6
-          name={isFavourite ? "heart" : "heart"}
-          solid={isFavourite}
-          size={20}
-          color={isFavourite ? "red" : "#6e6e6e"}
-        />
-      </IconWrapper>
+      {activeTab !== "OrderDetails" && (
+        <IconWrapper onPress={toggleFavourite}>
+          <FontAwesome6
+            name={isFavourite ? "heart" : "heart"}
+            solid={isFavourite}
+            size={20}
+            color={isFavourite ? "red" : "#6e6e6e"}
+          />
+        </IconWrapper>
+      )}
     </View>
   );
 };

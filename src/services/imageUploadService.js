@@ -6,24 +6,20 @@ import {
   PROFILE_CLOUD_NAME,
 } from "@env";
 
-console.log(
-  "The ENV Variables are: ",
-  PRODUCT_UPLOAD_PRESET,
-  PRODUCT_CLOUD_NAME,
-  PROFILE_UPLOAD_PRESET,
-  PROFILE_CLOUD_NAME
-);
-
 export const uploadImage = async (image, bucketName, userId = null) => {
+  console.log("Image is: ", image);
+  
   const formData = new FormData();
-  formData.append("file", image);
+
+  formData.append("file", {
+    uri: image.uri,
+    type: image.type,
+    name: image.name,
+  });
+
   formData.append(
     "upload_preset",
     bucketName === "profile" ? PROFILE_UPLOAD_PRESET : PRODUCT_UPLOAD_PRESET
-  );
-  formData.append(
-    "cloud_name",
-    bucketName === "profile" ? PROFILE_CLOUD_NAME : PRODUCT_CLOUD_NAME
   );
 
   try {
@@ -31,11 +27,18 @@ export const uploadImage = async (image, bucketName, userId = null) => {
       `https://api.cloudinary.com/v1_1/${
         bucketName === "profile" ? PROFILE_CLOUD_NAME : PRODUCT_CLOUD_NAME
       }/image/upload`,
-      formData
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     console.log("From cloudinary: ", response.data);
-    // return response.data.secure_url;
+    return response.data.secure_url;
   } catch (error) {
+    console.error("Upload error:", error);
     throw error;
   }
 };

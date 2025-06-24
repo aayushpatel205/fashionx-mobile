@@ -1,5 +1,5 @@
 import React from "react";
-import { View , Text } from "react-native";
+import { View, Text } from "react-native";
 import styled from "styled-components";
 import CustomText from "./CustomText";
 import { useAppData } from "../Context/AppContext";
@@ -28,22 +28,46 @@ const HorizontalContainer = styled.View`
   align-items: center;
 `;
 
-const OrderPageCard = () => {
-    const {activeTab , setActiveTab} = useAppData();
+const OrderPageCard = ({ order, date, totalCost, totalQuantity }) => {
+  const { activeTab, setActiveTab, setActiveOrder, activeOrder } = useAppData();
+  const status = order.status;
+
+  const statusColorObject = {
+    "Order Placed": "#0EA5E9", // blue-500
+    Packing: "#FACC15", // yellow-400
+    Shipped: "#8B5CF6", // purple-500
+    "Out for Delivery": "#FB923C", // orange-400
+    Delivered: "#16A34A", // green-600
+  };
+
+  // let statusColor = "bg-blue-500";
+  // if (status === "Packing") {
+  //   statusColor = "bg-yellow-400";
+  // } else if (status === "Shipped") {
+  //   statusColor = "bg-purple-500";
+  // } else if (status === "Out for Delivery") {
+  //   statusColor = "bg-orange-400";
+  // } else if (status === "Delivered") {
+  //   statusColor = "bg-green-600";
+  // }
   return (
     <OrderCard>
       <CustomText
         style={{ fontSize: 18, color: "#a9a9a9", alignSelf: "flex-end" }}
       >
-        15th Jan , 2025
+        {date}
       </CustomText>
 
       <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
         <CustomText style={{ fontSize: 20, color: "#a9a9a9" }}>
-          Order Id:{" "}
+          Order Id:{"  "}
         </CustomText>
-        <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
-          12345aghaghkhkgwwhkg
+        <CustomText
+          numberOfLines={1}
+          weight="600"
+          style={{ fontSize: 20, color: "#000", width: "65%" }}
+        >
+          {order?._id}
         </CustomText>
       </View>
 
@@ -53,7 +77,7 @@ const OrderPageCard = () => {
             Quantity:{" "}
           </CustomText>
           <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
-            4
+            {totalQuantity}
           </CustomText>
         </HorizontalContainer>
 
@@ -62,7 +86,7 @@ const OrderPageCard = () => {
             Total Amt:{" "}
           </CustomText>
           <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
-            $112
+            ${totalCost}
           </CustomText>
         </HorizontalContainer>
       </View>
@@ -74,11 +98,19 @@ const OrderPageCard = () => {
           alignItems: "center",
         }}
       >
-        <ButtonContainer onPress={() => setActiveTab("OrderDetails")}>
+        <ButtonContainer
+          onPress={() => {
+            setActiveTab("OrderDetails");
+            setActiveOrder(order);
+          }}
+        >
           <CustomText style={{ fontSize: 18 }}>Details</CustomText>
         </ButtonContainer>
-        <CustomText weight="600" style={{ fontSize: 20, color: "green" }}>
-          Delivered
+        <CustomText
+          weight="600"
+          style={{ fontSize: 20, color: statusColorObject[status] }}
+        >
+          {status}
         </CustomText>
       </View>
     </OrderCard>

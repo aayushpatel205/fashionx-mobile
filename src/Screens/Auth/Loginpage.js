@@ -125,8 +125,7 @@ const Loginpage = ({ navigation }) => {
                     data: {
                       name: response.data.user.name,
                       email: response.data.user.email,
-                      token: response.data.token,
-                      id: response.data.user._id,
+                      id: response.data.user._id
                     },
                     profilePicture: response?.data.user.profilePicture,
                   });

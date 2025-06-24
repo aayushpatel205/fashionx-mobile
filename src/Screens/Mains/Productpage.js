@@ -1,32 +1,31 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Image, TouchableOpacity, View } from "react-native";
+import { useRef, useEffect, useState } from "react";
+import { TouchableOpacity, View } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import LinearGradient from "react-native-linear-gradient";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import VerticalProductCard from "../../Components/VerticalProductCard";
 import { useAppData } from "../../Context/AppContext";
-import { getProductByCategory } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-import { deleteFromWishlist, userUpdateDetails } from "../../api/userApis";
-import { CheckoutButton } from "./Cartpage";
+import {
+  deleteFromWishlist,
+  userUpdateDetails,
+  getProductByCategory,
+} from "../../api/userApis";
+import Toast from "react-native-toast-message";
 
-
-const Productpage = ({ showSearch, setShowSearch }) => {
+const Productpage = () => {
   const [isFavourite, setIsFavourite] = useState(false);
   const [showSizeDropdown, setShowSizeDropdown] = useState(false);
   const [selectedSize, setSelectedSize] = useState("S");
-  const { activeTab, setActiveTab, activeProduct, setActiveProduct } =
-    useAppData();
+  const { setActiveTab, activeProduct } = useAppData();
   const { userData, userCartData, setUserCartData, wishlistIdArray } =
     useUserData();
   const [relatedProducts, setRelatedProducts] = useState([]);
-  // const actionSheetRef = useRef<ActionSheet>null;
+
   const sizes = ["S", "M", "L", "XL", "XXL"];
   const scrollRef = useRef(null);
-
-  console.log("activeProduct: ", activeProduct?._id);
 
   const getRelatedProducts = async () => {
     let newResponse = await getProductByCategory(
@@ -34,7 +33,6 @@ const Productpage = ({ showSearch, setShowSearch }) => {
       activeProduct?.subCategory,
       "asc"
     );
-    // console.log(newResponse.data);
     newResponse = newResponse?.data
       .filter((item) => item._id !== activeProduct?._id)
       .slice(0, 5);
@@ -42,7 +40,6 @@ const Productpage = ({ showSearch, setShowSearch }) => {
   };
 
   const handleIconPress = async () => {
-    console.log("Heart icon pressed!");
     try {
       if (isFavourite) {
         const response = await deleteFromWishlist(
@@ -50,7 +47,10 @@ const Productpage = ({ showSearch, setShowSearch }) => {
           activeProduct?._id
         );
         wishlistIdArray.filter((id) => id !== activeProduct?._id);
-        console.log("Is removed !!", response);
+        Toast.show({
+          type: "errorToast",
+          text1: "Removed from favourites",
+        });
       } else {
         const response = await userUpdateDetails({
           user_id: userData?.data.id,
@@ -58,13 +58,18 @@ const Productpage = ({ showSearch, setShowSearch }) => {
           isWishlist: true,
         });
         wishlistIdArray.push(activeProduct?._id);
-        // console.log("Is added !!", response);
+        Toast.show({
+          type: "successToast",
+          text1: "Added to favourites",
+        });
       }
       setIsFavourite(!isFavourite);
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Unexpected Error Occured",
+      });
     }
-    // You can toggle favorite state or trigger animation here
   };
 
   useEffect(() => {
@@ -158,15 +163,6 @@ const Productpage = ({ showSearch, setShowSearch }) => {
                   ))}
                 </DropdownOverlay>
               )}
-
-              {/* <IconWrapper>
-                <FontAwesome6
-                  name={isFavourite ? "heart" : "heart"}
-                  solid={isFavourite}
-                  size={20}
-                  color={isFavourite ? "red" : "#6e6e6e"}
-                />
-              </IconWrapper> */}
             </View>
           </Row>
 
@@ -239,9 +235,6 @@ const Productpage = ({ showSearch, setShowSearch }) => {
           </CartButton>
         </Gradient>
       </ButtonWrapper>
-      {/* <ActionSheet ref={actionSheetRef}>
-        <Text>Hi, I am here.</Text>
-      </ActionSheet> */}
     </Wrapper>
   );
 };
@@ -255,10 +248,6 @@ const IconWrapper = styled.TouchableOpacity`
   top: 15px;
   right: 15px;
   z-index: 5;
-  /* position: absolute;
-  z-index: 100;
-  right: 0px;
-  bottom: -5px; */
   background-color: #fff;
   padding: 8px;
   border-radius: 30px;
