@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { View, Text } from "react-native";
 import styled from "styled-components/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 

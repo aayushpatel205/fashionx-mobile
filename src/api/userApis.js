@@ -77,7 +77,6 @@ export const userLogout = async () => {
 };
 
 export const userUpdate = async (userDetails) => {
-  console.log("userDetails", userDetails);
   try {
     const response = await axiosInstance.patch(
       "/user/update/personal-details",
@@ -126,7 +125,6 @@ export const getProductBySearch = async (search) => {
 };
 
 export const userUpdateDetails = async (userDetails) => {
-  console.log(userDetails);
   try {
     const response = await axiosInstance.patch(
       "/user/update/details",
@@ -178,7 +176,6 @@ export const addToOrder = async (userData, order) => {
 };
 
 export const getUserOrders = async (user_id) => {
-  console.log("user_id: ", user_id);
   try {
     const response = await axiosInstance.get("/user/get-user-orders", {
       params: {

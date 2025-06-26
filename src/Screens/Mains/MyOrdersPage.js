@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { View, ScrollView , ActivityIndicator } from "react-native";
+import { useState, useEffect } from "react";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import CustomText from "../../Components/CustomText";
 import { useAppData } from "../../Context/AppContext";
 import OrderPageCard from "../../Components/OrderPageCard";
 import { getUserOrders } from "../../api/userApis";
 import { useUserData } from "../../Context/UserContext";
+import Toast from "react-native-toast-message";
 
 const MyOrdersPage = () => {
-  const { activeTab, setActiveTab } = useAppData();
+  const { setActiveTab } = useAppData();
   const { userData } = useUserData();
   const [userOrders, setUserOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,11 +41,13 @@ const MyOrdersPage = () => {
   const getMyOrders = async () => {
     try {
       const response = await getUserOrders(userData?.data.id);
-      console.log("Order recieved: ", response);
       setUserOrders(response.orders);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error fetching orders"
+      });
       setLoading(false);
     }
   };
@@ -54,10 +57,10 @@ const MyOrdersPage = () => {
   }, [userData]);
 
   if (loading) {
-      return (
-        <ActivityIndicator style={{ marginTop: 100 }} size={65} color={"#000"} />
-      );
-    }
+    return (
+      <ActivityIndicator style={{ marginTop: 100 }} size={65} color={"#000"} />
+    );
+  }
 
   return (
     <ScrollView
@@ -85,13 +88,15 @@ const MyOrdersPage = () => {
             (acc, item) => acc + item.price * item.quantity,
             0
           );
-          // totalQuantity using reduce
-          const totalQuantity = element.productInfo.reduce(
-            (acc, item) => acc + item.quantity,
-            0
-          );
           const date = convertIntoDate(element?.createdAt);
-          return <OrderPageCard key={index} order={element} date={date} totalCost={totalCost} totalQuantity={totalQuantity}/>;
+          return (
+            <OrderPageCard
+              key={index}
+              order={element}
+              date={date}
+              totalCost={totalCost}
+            />
+          );
         })}
       </View>
     </ScrollView>

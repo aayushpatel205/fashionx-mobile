@@ -1,4 +1,3 @@
-import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./src/Navigation/AuthStack";
 import { AppContextProvider } from "./src/Context/AppContext";

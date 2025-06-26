@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { View, ScrollView, RefreshControl } from "react-native";
 import CustomText from "../../Components/CustomText";
 import styled from "styled-components";

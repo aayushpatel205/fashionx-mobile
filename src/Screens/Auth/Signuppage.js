@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  TextInput,
   View,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
-  Pressable,
+  StatusBar,
 } from "react-native";
 import CustomText from "../../Components/CustomText";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
@@ -49,146 +48,165 @@ const Signuppage = ({ navigation }) => {
     password: "",
   });
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={{ flex: 1 }}
-          >
-            <ScrollView
-              contentContainerStyle={{ flexGrow: 1 }}
-              keyboardShouldPersistTaps="handled"
+    <>
+      <SafeAreaProvider>
+        <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
+        <SafeAreaView style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              style={{ flex: 1 }}
             >
-              <View
-                style={{ flex: 1, backgroundColor: "#f5f5f5", padding: 10 }}
+              <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps="handled"
               >
-                <Ionicons name="chevron-back" size={40} color="black" />
-
                 <View
-                  style={{
-                    padding: 20,
-                    marginTop: 40,
-                    flexDirection: "column",
-                    gap: 10,
-                  }}
+                  style={{ flex: 1, backgroundColor: "#f5f5f5", padding: 10 }}
                 >
-                  <CustomText
-                    weight="600"
-                    style={{ fontSize: 45, color: "black" }}
-                  >
-                    Sign Up
-                  </CustomText>
-
                   <View
                     style={{
+                      padding: 20,
+                      marginTop: 40,
                       flexDirection: "column",
-                      gap: 20,
-                      marginTop: 25,
-                    }}
-                  >
-                    <InputBox
-                      placeholder="Enter name..."
-                      keyboardType="default"
-                      value={userDetails?.name}
-                      onChangeText={(text) =>
-                        setUserDetails({
-                          ...userDetails,
-                          name: text,
-                        })
-                      }
-                    />
-                    <InputBox
-                      placeholder="Enter email..."
-                      keyboardType="email-address"
-                      value={userDetails?.email}
-                      onChangeText={(text) =>
-                        setUserDetails({
-                          ...userDetails,
-                          email: text,
-                        })
-                      }
-                    />
-                    <PasswordView>
-                      <InputBox
-                        style={{ width: "93%" }}
-                        placeholder="Enter password..."
-                        secureTextEntry={!isPasswordVisible}
-                        value={userDetails?.password}
-                        onChangeText={(text) =>
-                          setUserDetails({
-                            ...userDetails,
-                            password: text,
-                          })
-                        }
-                      />
-                      <Ionicons
-                        onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                        name={isPasswordVisible ? "eye-sharp" : "eye-off-sharp"}
-                        size={25}
-                        color="black"
-                      />
-                    </PasswordView>
-
-                    <CustomText
-                      onPress={() => navigation.navigate("Loginpage")}
-                      weight="500"
-                      style={{
-                        fontSize: 16,
-                        color: "black",
-                        alignSelf: "flex-end",
-                      }}
-                    >
-                      Already have an account?
-                    </CustomText>
-                  </View>
-
-                  <Button
-                    onPress={async () => {
-                      console.log("userDetails: ", userDetails);
-                      try {
-                        if (
-                          !userDetails.name ||
-                          !userDetails.email ||
-                          !userDetails.password
-                        ) {
-                          console.log("userDetails: ", userDetails);
-                          alert("Please fill all the fields");
-                          return;
-                        }
-
-                        if (!emailRegex.test(userDetails.email)) {
-                          alert("Please enter a valid email address.");
-                          setUserDetails({ name: "", email: "", password: "" });
-                          return;
-                        }
-                        const response = await userSignUp(
-                          userDetails.name,
-                          userDetails.email,
-                          userDetails.password
-                        );
-                        setUserDetails({ name: "", email: "", password: "" });
-                        alert(response.data.message);
-                        navigation.navigate("Loginpage");
-                      } catch (error) {
-                        alert(error.response.data.message);
-                      }
+                      gap: 10,
                     }}
                   >
                     <CustomText
-                      weight="500"
-                      style={{ fontSize: 20, color: "#fff" }}
+                      weight="600"
+                      style={{ fontSize: 45, color: "black" }}
                     >
                       Sign Up
                     </CustomText>
-                  </Button>
+
+                    <View
+                      style={{
+                        flexDirection: "column",
+                        gap: 20,
+                        marginTop: 25,
+                      }}
+                    >
+                      <InputBox
+                        placeholder="Enter name..."
+                        keyboardType="default"
+                        value={userDetails?.name}
+                        onChangeText={(text) =>
+                          setUserDetails({
+                            ...userDetails,
+                            name: text,
+                          })
+                        }
+                      />
+                      <InputBox
+                        placeholder="Enter email..."
+                        keyboardType="email-address"
+                        value={userDetails?.email}
+                        onChangeText={(text) =>
+                          setUserDetails({
+                            ...userDetails,
+                            email: text,
+                          })
+                        }
+                      />
+                      <PasswordView>
+                        <InputBox
+                          style={{ width: "93%" }}
+                          placeholder="Enter password..."
+                          secureTextEntry={!isPasswordVisible}
+                          value={userDetails?.password}
+                          onChangeText={(text) =>
+                            setUserDetails({
+                              ...userDetails,
+                              password: text,
+                            })
+                          }
+                        />
+                        <Ionicons
+                          onPress={() =>
+                            setIsPasswordVisible(!isPasswordVisible)
+                          }
+                          name={
+                            isPasswordVisible ? "eye-sharp" : "eye-off-sharp"
+                          }
+                          size={25}
+                          color="black"
+                        />
+                      </PasswordView>
+
+                      <CustomText
+                        onPress={() => navigation.navigate("Loginpage")}
+                        weight="500"
+                        style={{
+                          fontSize: 16,
+                          color: "black",
+                          alignSelf: "flex-end",
+                        }}
+                      >
+                        Already have an account?
+                      </CustomText>
+                    </View>
+
+                    <Button
+                      onPress={async () => {
+                        try {
+                          if (
+                            !userDetails.name ||
+                            !userDetails.email ||
+                            !userDetails.password
+                          ) {
+                            Toast.show({
+                              type: "errorToast",
+                              text1: "Please fill all fields",
+                            });
+                            return;
+                          }
+
+                          if (!emailRegex.test(userDetails.email)) {
+                            Toast.show({
+                              type: "errorToast",
+                              text1: "Please enter a valid email",
+                            });
+                            setUserDetails({
+                              name: "",
+                              email: "",
+                              password: "",
+                            });
+                            return;
+                          }
+                          const response = await userSignUp(
+                            userDetails.name,
+                            userDetails.email,
+                            userDetails.password
+                          );
+                          setUserDetails({ name: "", email: "", password: "" });
+                          Toast.show({
+                            type: "successToast",
+                            text1: response.data.message,
+                          });
+                          navigation.navigate("Loginpage");
+                        } catch (error) {
+                          Toast.show({
+                            type: "successToast",
+                            text1: error.response.data.message
+                          });
+                        }
+                      }}
+                    >
+                      <CustomText
+                        weight="500"
+                        style={{ fontSize: 20, color: "#fff" }}
+                      >
+                        Sign Up
+                      </CustomText>
+                    </Button>
+                  </View>
                 </View>
-              </View>
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
-      </SafeAreaView>
-    </SafeAreaProvider>
+              </ScrollView>
+            </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </>
   );
 };
 

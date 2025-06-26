@@ -30,13 +30,9 @@ const getFormattedDate = () => {
   return `${day}${suffix} ${month}, ${year}`;
 };
 
-export default function PaymentResultPage() {
+export default function PaymentResultPage({ cartTotal , setCartTotal }) {
   const { setActiveTab } = useAppData();
-  const { userCartData, userData , setUserCartData } = useUserData();
-  const totalAmount = userCartData?.reduce(
-    (acc, item) => acc + (item.price * item.quantity || 0),
-    0
-  );
+  const { userCartData, userData, setUserCartData } = useUserData();
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -50,9 +46,9 @@ export default function PaymentResultPage() {
             Payment Successful
           </CustomText>
 
-          <View style={{ alignItems: "center", gap: 10 }}>
-            <CustomText weight="600" style={{ fontSize: 27 }}>
-              $ {totalAmount}
+          <View style={{ alignItems: "center", gap: 15 }}>
+            <CustomText weight="600" style={{ fontSize: 30 }}>
+              $ {parseInt(cartTotal + cartTotal * 0.2)}.00
             </CustomText>
             <CustomText weight="600" style={{ fontSize: 27 }}>
               {userData?.data.name}
@@ -68,8 +64,8 @@ export default function PaymentResultPage() {
           <Button
             style={{ width: "100%" }}
             onPress={() => {
+              setCartTotal(0);
               setActiveTab("Home");
-              setUserCartData([]);
             }}
           >
             <CustomText weight="600" style={{ color: "#fff", fontSize: 21 }}>

@@ -1,4 +1,4 @@
-// https://fashionx-service.vercel.app/
+
 import axios from "axios";
 import { BACKEND_URL } from "@env";
 

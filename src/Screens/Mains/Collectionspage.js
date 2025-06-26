@@ -1,12 +1,7 @@
-import React, { act, useState } from "react";
 import { View, Image } from "react-native";
 import CustomText from "../../Components/CustomText";
-import TabNavigation from "../../Components/TabNavigation";
-import Navbar from "../../Components/Navbar";
 import { useAppData } from "../../Context/AppContext";
 import styled from "styled-components";
-import { useNavigation } from "@react-navigation/native";
-import { FontDisplay } from "expo-font";
 
 const CategoryContainer = styled.TouchableOpacity`
   width: 88%;
@@ -39,8 +34,7 @@ const TextView = styled.View`
 `;
 
 const Collectionspage = () => {
-  const navigation = useNavigation();
-  const { activeTab, setActiveTab } =
+  const { setActiveTab } =
     useAppData();
   const categoryArray = [
     {

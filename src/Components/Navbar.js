@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { View, TextInput } from "react-native";
+import { useState } from "react";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import Feather from "react-native-vector-icons/Feather";
 import CustomText from "./CustomText";
 import styled from "styled-components/native";
-import Sidebar from "./Sidebar";
 import { getProductBySearch } from "../api/userApis";
 import { useAppData } from "../Context/AppContext";
 
@@ -12,7 +10,7 @@ const Container = styled.View`
   width: 100%;
   flex-direction: row;
   align-items: center;
-  gap: 28%;
+  gap: 26%;
   padding: 0px 15px 10px 15px;
   border-bottom-width: 0.5px;
   border-bottom-color: #d3d3d3;
@@ -38,13 +36,11 @@ const SearchInput = styled.TextInput`
 `;
 
 const Navbar = ({
-  allProducts,
   setAllProducts,
   showSearch,
   setShowSearch,
   searchText,
   setSearchText,
-  sidebarOpen,
   setSidebarOpen,
 }) => {
   const { activeTab, setActiveTab } = useAppData();
@@ -55,9 +51,9 @@ const Navbar = ({
     setShowSearch((prev) => !prev);
     setSearchText("");
   };
-  useEffect(() => {
-    console.log(activeTab);
-  }, []);
+  // useEffect(() => {
+  //   console.log(activeTab);
+  // }, []);
 
   return (
     <>

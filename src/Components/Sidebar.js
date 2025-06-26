@@ -1,10 +1,13 @@
-import React, { useRef } from "react";
-import { Dimensions, TouchableOpacity, Animated } from "react-native";
+import { useRef,useEffect } from "react";
+import {
+  Dimensions,
+  TouchableOpacity,
+  Animated
+} from "react-native";
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomText from "./CustomText";
-import { useNavigation } from "@react-navigation/native";
 import { useAppData } from "../Context/AppContext";
 
 const { width, height } = Dimensions.get("window");
@@ -52,13 +55,12 @@ const LogoutButton = styled(TouchableOpacity)`
   margin-left: 15px;
 `;
 
-const Sidebar = ({ visible, onClose }) => {
-  const { activeTab, setActiveTab } = useAppData();
-  const navigation = useNavigation();
+const Sidebar = ({ visible, onClose , setExitModalVisible }) => {
+  const { setActiveTab } = useAppData();
   const slideAnim = useRef(new Animated.Value(-width * 0.9)).current;
   const backdropOpacity = useRef(new Animated.Value(0)).current;
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (visible) {
       Animated.parallel([
         Animated.timing(slideAnim, {
@@ -96,7 +98,10 @@ const Sidebar = ({ visible, onClose }) => {
         </Backdrop>
       )}
 
-      <SidebarContainer height={200} style={{ transform: [{ translateX: slideAnim }] }}>
+      <SidebarContainer
+        height={200}
+        style={{ transform: [{ translateX: slideAnim }] }}
+      >
         <Ionicons
           name="close"
           size={30}
@@ -105,10 +110,12 @@ const Sidebar = ({ visible, onClose }) => {
           onPress={() => onClose()}
         />
 
-        <MenuItem onPress={() => {
-          setActiveTab("Collections");
-          onClose();
-        }}>
+        <MenuItem
+          onPress={() => {
+            setActiveTab("Collections");
+            onClose();
+          }}
+        >
           <MenuIcon name="folder-multiple-outline" />
           <CustomText weight="600" style={{ fontSize: 21, color: "#fff" }}>
             Collections
@@ -129,6 +136,7 @@ const Sidebar = ({ visible, onClose }) => {
 
         <MenuItem
           onPress={() => {
+            setActiveTab("MyOrders");
             onClose();
           }}
         >
@@ -140,6 +148,7 @@ const Sidebar = ({ visible, onClose }) => {
 
         <LogoutButton
           onPress={() => {
+            setExitModalVisible(true);
             onClose();
           }}
         >

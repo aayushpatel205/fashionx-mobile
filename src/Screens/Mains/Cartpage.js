@@ -75,17 +75,17 @@ const Cartpage = () => {
           <View
             style={{
               width: "100%",
-              marginTop: "50%",
+              marginTop: "40%",
               alignItems: "center",
-              gap: 10,
+              gap: 15,
             }}
           >
             <MaterialCommunityIcons
               name="cart-remove"
-              size={50}
+              size={75}
               color="#242424"
             />
-            <CustomText weight="600" style={{ fontSize: 33 }}>
+            <CustomText style={{ fontSize: 30 }}>
               The Cart is Empty
             </CustomText>
           </View>

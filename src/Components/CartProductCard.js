@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Image, TouchableOpacity , TouchableWithoutFeedback , Keyboard } from "react-native";
+import { View, Image, TouchableOpacity, Dimensions } from "react-native";
 import styled from "styled-components";
 import CustomText from "./CustomText";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
@@ -7,11 +7,17 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { useUserData } from "../Context/UserContext";
 import { userUpdateDetails } from "../api/userApis";
 
+// Get screen height
+const { height: screenHeight } = Dimensions.get("window");
+
+// Card height: 25% of screen height
+const cardHeight = screenHeight * 0.165;
+
 const Container = styled.TouchableOpacity.attrs({
   activeOpacity: 1,
 })`
   width: 100%;
-  height: 125px;
+  height: ${130}px;
   border-radius: 15px;
   overflow: hidden;
   flex-direction: row;
@@ -24,7 +30,7 @@ const InnerContainer = styled.View`
   height: 100%;
   padding: 15px;
   flex-direction: column;
-  gap: 10px;
+  gap: 12%;
 `;
 
 const DropdownMenu = styled.View`
@@ -47,7 +53,7 @@ const DropdownOption = styled.TouchableOpacity`
 `;
 
 const CartProductCard = ({ element }) => {
-  const { userCartData, setUserCartData , userData , wishlistIdArray } = useUserData();
+  const { userCartData, setUserCartData, userData, wishlistIdArray } = useUserData();
   const [quantity, setQuantity] = useState(element?.quantity);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -143,7 +149,7 @@ const CartProductCard = ({ element }) => {
             />
           </View>
 
-          <CustomText weight="600" style={{ fontSize: 21, color: "#000"}}>
+          <CustomText weight="600" style={{ fontSize: 21, color: "#000" }}>
             $ {element?.price}
           </CustomText>
         </View>
@@ -161,11 +167,6 @@ const CartProductCard = ({ element }) => {
       {/* Dropdown menu */}
       {showDropdown && (
         <DropdownMenu>
-          <DropdownOption onPress={handleAddToFavourites}>
-            <CustomText weight="500" style={{ fontSize: 16, color: "#000" }}>
-              Add to Favourites
-            </CustomText>
-          </DropdownOption>
           <DropdownOption onPress={handleDeleteFromCart} last>
             <CustomText weight="500" style={{ fontSize: 16, color: "#ff0000" }}>
               Delete from Cart

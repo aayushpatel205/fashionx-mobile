@@ -15,9 +15,10 @@ import MyOrdersPage from "./MyOrdersPage";
 import OrderDetails from "./OrderDetails";
 import Personaldetailspage from "./Personaldetailspage";
 import Sidebar from "../../Components/Sidebar";
-import { StatusBar } from "react-native";
+import { StatusBar, BackHandler } from "react-native";
 import Checkoutpage from "./Checkoutpage";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import ExitConfirmationModal from "../../Components/ExitConfirmationModal";
 import PaymentResultPage from "./PaymentResultPage";
 
 const MainContainer = styled.View`
@@ -29,12 +30,15 @@ const ContentContainer = styled.View`
   flex: 1;
 `;
 
+
 const MainLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { activeTab, setActiveTab } = useAppData();
   const [allProducts, setAllProducts] = useState([]);
   const [showSearch, setShowSearch] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [cartTotal, setCartTotal] = useState(0);
+  const [exitModalVisible, setExitModalVisible] = useState(false);
 
   const renderScreen = () => {
     useEffect(() => {
@@ -80,9 +84,9 @@ const MainLayout = () => {
       case "PersonalDetails":
         return <Personaldetailspage />;
       case "Checkout":
-        return <Checkoutpage />;
+        return <Checkoutpage cartTotal={cartTotal} setCartTotal={setCartTotal} />;
       case "PaymentResult":
-        return <PaymentResultPage/>
+        return <PaymentResultPage cartTotal={cartTotal} setCartTotal={setCartTotal}/>;
       default:
         return null;
     }
@@ -92,7 +96,7 @@ const MainLayout = () => {
     <>
       <SafeAreaProvider>
         <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-          <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+          <StatusBar barStyle="dark-content" backgroundColor="transparent" />
           <MainContainer>
             <Navbar
               allProducts={allProducts}
@@ -109,7 +113,18 @@ const MainLayout = () => {
           </MainContainer>
         </SafeAreaView>
       </SafeAreaProvider>
-      <Sidebar visible={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar
+        visible={sidebarOpen}
+        setExitModalVisible={setExitModalVisible}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <ExitConfirmationModal
+        visible={exitModalVisible}
+        onCancel={() => setExitModalVisible(false)}
+        onConfirm={() => {
+          BackHandler.exitApp(); // or navigation.goBack()
+        }}
+      />
     </>
   );
 };

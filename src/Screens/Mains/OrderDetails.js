@@ -1,4 +1,3 @@
-import React from "react";
 import { ScrollView, View } from "react-native";
 import Entypo from "react-native-vector-icons/Entypo";
 import CustomText from "../../Components/CustomText";
@@ -6,9 +5,8 @@ import HorizontalProductCard from "../../Components/HorizontalProductCard";
 import { useAppData } from "../../Context/AppContext";
 
 const OrderDetails = () => {
-  const { activeTab, setActiveTab, setActiveOrder, activeOrder } = useAppData();
+  const { setActiveTab, activeOrder } = useAppData();
   const status = activeOrder.status;
-  console.log("The active order here is: ", activeOrder);
 
   const convertIntoDate = (dateStr) => {
     const date = new Date(dateStr);

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Image, Alert } from "react-native";
+import { useState } from "react";
+import { View, Alert } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -10,13 +10,14 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { Button } from "../Auth/Loginpage";
 import { uploadImage } from "../../services/imageUploadService";
 import { updateProfilePicture } from "../../api/userApis";
+import Toast from "react-native-toast-message";
 const Profilepage = () => {
-  const { activeTab, setActiveTab } = useAppData();
+  const { setActiveTab } = useAppData();
   const { userData, setUserData } = useUserData();
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUri, setImageUri] = useState(userData?.profilePicture);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(userData);
+
   const handleImagePick = () => {
     launchImageLibrary({ mediaType: "photo", quality: 0.7 }, (response) => {
       if (response.didCancel) {
@@ -37,23 +38,30 @@ const Profilepage = () => {
 
   const handleUpload = async () => {
     if (!selectedImage) {
-      Alert.alert("No Image Selected", "Please select an image first.");
-      return;
+      Toast.show({
+        type: "errorToast",
+        text1: "No image selected",
+      });
     }
     try {
       const response = await uploadImage(selectedImage, "profile");
       const response2 = await updateProfilePicture(userData?.data.id, response);
-      console.log("Response1: ", response);
       const updatedUserData = {
         ...userData,
         profilePicture: response,
       };
       setUserData(updatedUserData);
       setImageUri(null);
-      alert("Success", "Profile picture updated!");
+      Toast.show({
+        type: "successToast",
+        text1: "Profile Picture Updated",
+      });
       setIsLoading(false);
     } catch (error) {
-      console.error("Error uploading image:", error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error uploading image",
+      });
       setImageUri(null);
       setIsLoading(false);
     }
@@ -182,9 +190,9 @@ const InnerContainer = styled.View`
 const Touchable = styled.TouchableOpacity``;
 
 const ImageWrapper = styled.View`
-  padding: 2px;
-  height: 92px;
-  width: 92px;
+  padding: 3px;
+  height: 93px;
+  width: 93px;
   border-radius: 60px;
   border: 3px solid #d3d3d3;
   justify-content: center;
@@ -194,8 +202,8 @@ const ImageWrapper = styled.View`
 `;
 
 const ProfileImage = styled.Image`
-  height: 95%;
-  width: 90%;
+  height: 100%;
+  width: 100%;
   border-radius: 60px;
 `;
 
@@ -214,17 +222,4 @@ const ButtonRow = styled.View`
   margin-bottom: 10px;
 `;
 
-const UploadButton = styled.TouchableOpacity`
-  background-color: black;
-  padding: 14px;
-  border-radius: 10px;
-  flex: 1;
-`;
 
-const RemoveButton = styled.TouchableOpacity`
-  background-color: #f5f5f5;
-  padding: 14px;
-  border-radius: 10px;
-  flex: 1;
-  border: 1px solid #d3d3d3;
-`;

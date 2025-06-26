@@ -52,7 +52,6 @@ const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
   const { userData, setWishlistIdArray, wishlistIdArray } = useUserData();
   const [isFavourite, setIsFavourite] = useState(false);
   const { activeTab, setActiveTab, setActiveProduct } = useAppData();
-  console.log(activeTab);
 
   useEffect(() => {
     wishlistIdArray.includes(element?._id)
@@ -125,7 +124,7 @@ const HorizontalProductCard = ({ element, userWishlist, setUserWishlist }) => {
             </CustomText>
           </View>
 
-          <View style={{ flexDirection: "row", gap: "35%" }}>
+          <View style={{ flexDirection: "row", gap: "25%" }}>
             <CustomText weight="600" style={{ fontSize: 20 }}>
               $ {element?.price}.00
             </CustomText>

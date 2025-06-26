@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
   Pressable,
   ActivityIndicator,
   Image,
+  RefreshControl,
 } from "react-native";
 import { useAppData } from "../../Context/AppContext";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components";
 import CustomText from "../../Components/CustomText";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import VerticalProductCard from "../../Components/VerticalProductCard";
 import Feather from "react-native-vector-icons/Feather";
 import { getProductByCategory } from "../../api/userApis";
 import noProductImg from "../../../assets/no-product.jpg";
-import { RefreshControl } from "react-native";
+import Toast from "react-native-toast-message";
 
 const ScrollCategory = styled(Pressable)`
   padding: 7px 20px;
@@ -55,7 +55,6 @@ const Dynamiccollectionspage = ({
     subCategory: [],
   });
   const categoryArray = ["Topwear", "Bottomwear", "Winterwear"];
-  // const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState("Low to High");
   const [refreshing, setRefreshing] = useState(false);
@@ -81,7 +80,10 @@ const Dynamiccollectionspage = ({
       );
       setAllProducts(response.data);
     } catch (error) {
-      console.log("Error while refreshing: ", error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Error while refreshing"
+      });
     } finally {
       setRefreshing(false);
       setShowSearch(false);
@@ -105,7 +107,10 @@ const Dynamiccollectionspage = ({
         setAllProducts(response.data);
         setLoading(false);
       } catch (error) {
-        console.log("Error: ", error);
+        Toast.show({
+          type: "errorToast",
+          text1: "Error fetching products",
+        });
       }
     };
     getProductsByCategory();
@@ -190,14 +195,6 @@ const Dynamiccollectionspage = ({
               paddingHorizontal: 10,
             }}
           >
-            <View
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
-            >
-              <Ionicons name="filter-outline" size={23} color="black" />
-              <CustomText weight="500" style={{ fontSize: 17 }}>
-                Filters
-              </CustomText>
-            </View>
 
             <Pressable
               onPress={() => {
@@ -205,7 +202,7 @@ const Dynamiccollectionspage = ({
                   sortBy === "Low to High" ? "High to Low" : "Low to High"
                 );
               }}
-              style={{ flexDirection: "row", alignItems: "center", gap: 10 }}
+              style={{ flexDirection: "row", alignItems: "center", gap: 15 }}
             >
               <FontAwesome6
                 name={
@@ -217,7 +214,7 @@ const Dynamiccollectionspage = ({
                 color="black"
               />
 
-              <CustomText weight="500" style={{ fontSize: 17 }}>
+              <CustomText weight="600" style={{ fontSize: 17 }}>
                 Price:{" "}
                 {sortBy === "Low to High"
                   ? "Lowest to Highest"
@@ -231,9 +228,10 @@ const Dynamiccollectionspage = ({
           contentContainerStyle={{
             paddingTop: 20,
             paddingHorizontal: 20,
-            paddingBottom: 15,
+            paddingBottom: 20,
             flexDirection: "row",
             flexWrap: "wrap",
+            justifyContent: "space-between",
             gap: 20,
             ...(allProducts?.length === 0 && { marginVertical: "45%" }), // apply only if no products
           }}

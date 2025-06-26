@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import CustomText from "../../Components/CustomText";
-import { Image } from "react-native";
 import styled from "styled-components/native";
 import CreditCardInput from "../../Components/CreditCardInput";
 import { CheckoutButton } from "./Cartpage";
@@ -37,14 +36,6 @@ const AddressView = styled.View`
   justify-content: center;
 `;
 
-const InputBox = styled.TextInput`
-  background-color: #fff;
-  padding: 15px;
-  font-size: 17px;
-  border-radius: 10px;
-  width: 85%;
-`;
-
 const TotalAmountView = styled.View`
   background-color: #fff;
   border-radius: 10px;
@@ -57,22 +48,9 @@ const AmountRow = styled.View`
   justify-content: space-between;
 `;
 
-// const CheckoutButton = styled.TouchableOpacity`
-//   bottom: 15px;
-//   left: 20px;
-//   right: 20px;
-//   width: 90%;
-//   background-color: #000;
-//   padding: 16px;
-//   align-items: center;
-//   justify-content: center;
-//   border-radius: 50px;
-//   z-index: 2;
-// `;
-
-const Checkoutpage = () => {
-  const { userData, userCartData , setUserCartData } = useUserData();
-  const { activeTab, setActiveTab } = useAppData();
+const Checkoutpage = ({ cartTotal, setCartTotal }) => {
+  const { userData, userCartData, setUserCartData } = useUserData();
+  const { setActiveTab } = useAppData();
   const [userDetails, setUserDetails] = useState();
   const [cardDetails, setCardDetails] = useState({
     number: "",
@@ -81,19 +59,20 @@ const Checkoutpage = () => {
     name: "",
   });
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
 
-  const totalAmount = userCartData?.reduce(
-    (acc, item) => acc + (item.price * item.quantity || 0),
-    0
-  );
+  useEffect(() => {
+    const totalAmount = userCartData?.reduce(
+      (acc, item) => acc + (item.price * item.quantity || 0),
+      0
+    );
+    setCartTotal(totalAmount);
+  }, [userCartData]);
+
   const hasCompleteAddress = (address) => {
     return (
       address?.street && address?.city && address?.state && address?.zipcode
     );
   };
-
-  console.log("usercartdata: ",userCartData)
 
   const handlePayment = async () => {
     try {
@@ -158,9 +137,8 @@ const Checkoutpage = () => {
 
       if (expiryDate < currentDate) {
         Toast.show({
-          type: "error",
-          text1: "Your Card has expired !!",
-          text2: "This is some something 👋",
+          type: "errorToast",
+          text1: "Your card has expired",
         });
         return;
       }
@@ -168,9 +146,8 @@ const Checkoutpage = () => {
       // CVV validation
       if (!cvvRegex.test(cardDetails?.cvv)) {
         Toast.show({
-          type: "error",
-          text1: "CVV should be 3 digits !!",
-          text2: "This is some something 👋",
+          type: "errorToast",
+          text1: "CVV should be of 3 digits only",
         });
         return;
       }
@@ -180,35 +157,21 @@ const Checkoutpage = () => {
         email: userData?.data.email,
         id: userData?.data.id,
       };
-  
-      // Call API to place order
-      const response = await addToOrder(userData?.data, userCartData);
+      const userCartCopy = JSON.parse(JSON.stringify(userCartData));
+      const response = await addToOrder(updatedUserData, userCartCopy);
       Toast.show({
         type: "successToast",
         text1: "Order is placed successfully !!",
       });
+      setUserCartData([]);
       setActiveTab("PaymentResult");
     } catch (error) {
-      console.log("The error is", error);
       Toast.show({
         type: "errorToast",
         text1: "Order couldn't be placed !!",
       });
     }
   };
-
-  useEffect(() => {
-    console.log("Card details changed: ", cardDetails);
-  }, [cardDetails]);
-
-  // Example data you’d pass in
-  const recipient = {
-    name: "Della Case",
-    amount: 50,
-    transactionId: "004672918",
-    date: "July 8, 2019",
-  };
-  console.log("userData: ", userData);
 
   const getDetails = async () => {
     setLoading(true);
@@ -217,7 +180,10 @@ const Checkoutpage = () => {
       setLoading(false);
       setUserDetails(response?.user);
     } catch (error) {
-      console.log(error);
+      Toast.show({
+        type: "errorToast",
+        text1: "Couldn't Fetch Details",
+      });
       setLoading(false);
     }
   };
@@ -297,14 +263,18 @@ const Checkoutpage = () => {
               <CustomText weight="600" style={{ fontSize: 18 }}>
                 Subtotal
               </CustomText>
-              <CustomText style={{ fontSize: 18 }}>${totalAmount}.00</CustomText>
+              <CustomText style={{ fontSize: 18 }}>
+                ${parseInt(cartTotal)}.00
+              </CustomText>
             </AmountRow>
 
             <AmountRow>
               <CustomText weight="600" style={{ fontSize: 18 }}>
                 Delivery
               </CustomText>
-              <CustomText style={{ fontSize: 18 }}>${totalAmount * 0.2}.00</CustomText>
+              <CustomText style={{ fontSize: 18 }}>
+                ${parseInt(cartTotal * 0.2)}.00
+              </CustomText>
             </AmountRow>
 
             <AmountRow>
@@ -312,7 +282,7 @@ const Checkoutpage = () => {
                 Total
               </CustomText>
               <CustomText weight="600" style={{ fontSize: 20 }}>
-                ${totalAmount + (totalAmount * 0.2)}.00
+                ${parseInt(cartTotal + cartTotal * 0.2)}.00
               </CustomText>
             </AmountRow>
           </TotalAmountView>
@@ -322,17 +292,9 @@ const Checkoutpage = () => {
       {/* Floating Checkout Button */}
       <CheckoutButton onPress={handlePayment}>
         <CustomText weight="600" style={{ fontSize: 20, color: "#fff" }}>
-          Pay Now - $470
+          Pay Now - ${parseInt(cartTotal + cartTotal * 0.2)}.00
         </CustomText>
       </CheckoutButton>
-      {/* <PaymentSuccessModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        recipientName={recipient.name}
-        amount={recipient.amount}
-        transactionId={recipient.transactionId}
-        date={recipient.date}
-      /> */}
     </PageWrapper>
   );
 };

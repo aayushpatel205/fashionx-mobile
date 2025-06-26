@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Image,
   ScrollView,
@@ -24,7 +24,7 @@ const Overlay = styled.View`
 `;
 
 const TextStyle = styled(CustomText)`
-  font-size: 60px;
+  font-size: 55px;
   color: #fff;
 `;
 

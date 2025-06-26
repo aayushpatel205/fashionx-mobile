@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import CustomText from "./CustomText";
 import { useAppData } from "../Context/AppContext";
@@ -6,12 +6,15 @@ import { userUpdateDetails, deleteFromWishlist } from "../api/userApis";
 import { useUserData } from "../Context/UserContext";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import Toast from "react-native-toast-message";
+import { Dimensions } from "react-native";
+
+const { width: screenWidth } = Dimensions.get("window");
 
 const CardContainer = styled.TouchableOpacity.attrs({
   activeOpacity: 1,
 })`
   max-height: 340px;
-  width: 175px;
+  width: ${screenWidth * 0.42}px;
   background-color: #fff;
   border-radius: 12px;
   overflow: hidden;
@@ -92,7 +95,6 @@ const VerticalProductCard = ({ element }) => {
     } catch (error) {
       console.log(error);
     }
-    // You can toggle favorite state or trigger animation here
   };
 
   return (

@@ -345,16 +345,16 @@ const Row = styled.View`
 `;
 
 const ProductName = styled(CustomText)`
-  font-size: 26px;
+  font-size: 24px;
   width: 72%;
 `;
 
 const Price = styled(CustomText)`
-  font-size: 26px;
+  font-size: 25px;
 `;
 
 const Description = styled(CustomText)`
-  font-size: 20px;
+  font-size: 19px;
 `;
 
 const ButtonWrapper = styled.View`

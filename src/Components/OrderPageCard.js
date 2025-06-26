@@ -1,21 +1,27 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import styled from "styled-components";
 import CustomText from "./CustomText";
 import { useAppData } from "../Context/AppContext";
 
+// Get screen height
+const { height: screenHeight } = Dimensions.get("window");
+
+// Card height: 30% of screen height
+const cardHeight = screenHeight * 0.245;
+
 const OrderCard = styled.View`
-  height: 200px;
+  height: ${cardHeight}px;
   width: 95%;
   background-color: #fff;
   border-radius: 12px;
   padding: 20px;
-  gap: 12px;
+  gap: 11%;
 `;
 
 const ButtonContainer = styled.TouchableOpacity`
   border: 1px solid #000;
-  border-radius: 20px;
+  border-radius: 30px;
   padding-vertical: 8px;
   padding-horizontal: 16px;
   align-items: center;
@@ -28,7 +34,7 @@ const HorizontalContainer = styled.View`
   align-items: center;
 `;
 
-const OrderPageCard = ({ order, date, totalCost, totalQuantity }) => {
+const OrderPageCard = ({ order, date, totalCost }) => {
   const { activeTab, setActiveTab, setActiveOrder, activeOrder } = useAppData();
   const status = order.status;
 
@@ -40,16 +46,6 @@ const OrderPageCard = ({ order, date, totalCost, totalQuantity }) => {
     Delivered: "#16A34A", // green-600
   };
 
-  // let statusColor = "bg-blue-500";
-  // if (status === "Packing") {
-  //   statusColor = "bg-yellow-400";
-  // } else if (status === "Shipped") {
-  //   statusColor = "bg-purple-500";
-  // } else if (status === "Out for Delivery") {
-  //   statusColor = "bg-orange-400";
-  // } else if (status === "Delivered") {
-  //   statusColor = "bg-green-600";
-  // }
   return (
     <OrderCard>
       <CustomText
@@ -74,10 +70,10 @@ const OrderPageCard = ({ order, date, totalCost, totalQuantity }) => {
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <HorizontalContainer>
           <CustomText style={{ fontSize: 20, color: "#a9a9a9" }}>
-            Quantity:{" "}
+            Products:{" "}
           </CustomText>
           <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
-            {totalQuantity}
+            {order?.productInfo.length}
           </CustomText>
         </HorizontalContainer>
 
@@ -86,7 +82,7 @@ const OrderPageCard = ({ order, date, totalCost, totalQuantity }) => {
             Total Amt:{" "}
           </CustomText>
           <CustomText weight="600" style={{ fontSize: 20, color: "#000" }}>
-            ${totalCost}
+            ${parseInt(totalCost + 0.2 * totalCost)}
           </CustomText>
         </HorizontalContainer>
       </View>

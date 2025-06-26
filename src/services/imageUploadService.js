@@ -7,8 +7,6 @@ import {
 } from "@env";
 
 export const uploadImage = async (image, bucketName, userId = null) => {
-  console.log("Image is: ", image);
-  
   const formData = new FormData();
 
   formData.append("file", {
@@ -34,8 +32,6 @@ export const uploadImage = async (image, bucketName, userId = null) => {
         },
       }
     );
-
-    console.log("From cloudinary: ", response.data);
     return response.data.secure_url;
   } catch (error) {
     console.error("Upload error:", error);

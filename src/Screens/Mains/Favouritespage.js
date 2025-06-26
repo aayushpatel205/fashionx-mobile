@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView, View, ActivityIndicator } from "react-native";
+import { useEffect, useState } from "react";
+import { View, ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import HorizontalProductCard from "../../Components/HorizontalProductCard";
 import { useUserData } from "../../Context/UserContext";
 import { getUserDetails } from "../../api/userApis";
 import Toast from "react-native-toast-message";
 
-const ScrollCategory = styled.View`
-  padding: 7px 20px;
-  background-color: #000;
-  border-radius: 25px;
-  max-width: 45%;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
-
 const CategoryView = styled.View`
-  padding: 10px 20px 15px 20px;
+  padding: 10px 20px 10px 20px;
   background-color: #fff;
   z-index: 10;
   border-bottom-width: 0.5px;
@@ -45,7 +34,7 @@ const ProductScrollView = styled.ScrollView.attrs(() => ({
 
 const Favouritespage = () => {
   const [userWishlist, setUserWishlist] = useState([]);
-  const { userData, wishlistIdArray, setWishlistIdArray } = useUserData();
+  const { userData } = useUserData();
   const [loading, setLoading] = useState(true);
 
   const getWishlistData = async () => {
@@ -80,73 +69,27 @@ const Favouritespage = () => {
           <CustomText weight="600" style={{ fontSize: 40 }}>
             Favourites
           </CustomText>
-          <ScrollView
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              flexDirection: "row",
-              gap: 10,
-              paddingVertical: 5,
-            }}
-          >
-            <ScrollCategory>
-              <CustomText weight="600" style={{ fontSize: 17, color: "#fff" }}>
-                TopWear
-              </CustomText>
-            </ScrollCategory>
-
-            <ScrollCategory>
-              <CustomText weight="600" style={{ fontSize: 17, color: "#fff" }}>
-                BottomWear
-              </CustomText>
-            </ScrollCategory>
-
-            <ScrollCategory>
-              <CustomText weight="600" style={{ fontSize: 17, color: "#fff" }}>
-                Winterwear
-              </CustomText>
-            </ScrollCategory>
-          </ScrollView>
-        </View>
-
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingHorizontal: 10,
-          }}
-        >
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <Ionicons name="filter-outline" size={23} color="black" />
-            <CustomText weight="500" style={{ fontSize: 17 }}>
-              Filters
-            </CustomText>
-          </View>
-
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-            <FontAwesome6
-              name="arrow-down-short-wide"
-              size={23}
-              color="black"
-            />
-            <CustomText weight="500" style={{ fontSize: 17 }}>
-              Price: Lowest to Highest
-            </CustomText>
-          </View>
         </View>
       </CategoryView>
 
       <ProductScrollView>
-        {userWishlist.map((item) => (
-          <HorizontalProductCard
-            setUserWishlist={setUserWishlist}
-            element={item}
-            userWishlist={userWishlist}
-            key={item._id}
-          />
-        ))}
+        {userWishlist.length > 0 ? (
+          userWishlist?.map((item) => (
+            <HorizontalProductCard
+              setUserWishlist={setUserWishlist}
+              element={item}
+              userWishlist={userWishlist}
+              key={item._id}
+            />
+          ))
+        ) : (
+          <View style={{ gap: 15, alignItems: "center", marginTop: "40%" }}>
+            <Ionicons name="heart-dislike-outline" size={90} color="#000" />
+            <CustomText style={{ fontSize: 30, color: "#000" }}>
+              No favourites yet
+            </CustomText>
+          </View>
+        )}
       </ProductScrollView>
     </View>
   );
