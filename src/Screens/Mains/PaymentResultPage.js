@@ -30,9 +30,9 @@ const getFormattedDate = () => {
   return `${day}${suffix} ${month}, ${year}`;
 };
 
-export default function PaymentResultPage({ cartTotal , setCartTotal }) {
+const PaymentResultPage = ({ cartTotal, setCartTotal }) => {
   const { setActiveTab } = useAppData();
-  const { userCartData, userData, setUserCartData } = useUserData();
+  const { userData } = useUserData();
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -76,7 +76,9 @@ export default function PaymentResultPage({ cartTotal , setCartTotal }) {
       </PageContainer>
     </ScrollView>
   );
-}
+};
+
+export default PaymentResultPage;
 
 // Styled components
 const PageContainer = styled.View`

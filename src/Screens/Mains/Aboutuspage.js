@@ -1,12 +1,11 @@
 import styled from "styled-components/native";
 import CustomText from "../../Components/CustomText";
+import AboutUsImage from "../../../assets/about-us-image.webp";
 
 const Aboutuspage = () => {
   return (
     <Container>
-      <BackgroundImage
-        source={require("../../../assets/about-us-image.webp")}
-      />
+      <BackgroundImage source={AboutUsImage} />
       <BlackOverlay />
 
       <ContentScroll
