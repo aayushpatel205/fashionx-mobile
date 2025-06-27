@@ -179,7 +179,9 @@ const Productpage = () => {
 
         <View style={{ marginVertical: 20, paddingHorizontal: 20, gap: 15 }}>
           <CustomText weight="700" style={{ fontSize: 30 }}>
-            Related Products
+            {relatedProducts.length !== 0
+              ? "Related Products"
+              : "No Related Products"}
           </CustomText>
           <View
             style={{
@@ -189,9 +191,10 @@ const Productpage = () => {
               flexWrap: "wrap",
             }}
           >
-            {relatedProducts?.map((item, index) => {
-              return <VerticalProductCard element={item} key={index} />;
-            })}
+            {relatedProducts.length !== 0 &&
+              relatedProducts.map((item, index) => {
+                return <VerticalProductCard element={item} key={index} />;
+              })}
           </View>
         </View>
       </Container>
