@@ -106,5 +106,11 @@
 - Gradient-styled payment card for intuitive checkout.
 - Smooth and managed state flow with **Context API**.
 
+---
 
+## 📦📥 APK Release
+
+📱 **Download the latest APK build from the [Releases Section](https://github.com/aayushpatel205/fashionx-mobile/releases/tag/v1.0.0)**.
+
+---
 
