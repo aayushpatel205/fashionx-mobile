@@ -6,13 +6,37 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "PRODUCT_UPLOAD_PRESET": "product-images",
+        "PRODUCT_CLOUD_NAME": "dhy82ujzr",
+        "PROFILE_UPLOAD_PRESET": "profile-images",
+        "PROFILE_CLOUD_NAME": "dtxiiiz9i",
+        "BACKEND_URL": "https://fashionx-service.vercel.app"
+      }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "PRODUCT_UPLOAD_PRESET": "product-images",
+        "PRODUCT_CLOUD_NAME": "dhy82ujzr",
+        "PROFILE_UPLOAD_PRESET": "profile-images",
+        "PROFILE_CLOUD_NAME": "dtxiiiz9i",
+        "BACKEND_URL": "https://fashionx-service.vercel.app"
+      }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "PRODUCT_UPLOAD_PRESET": "product-images",
+        "PRODUCT_CLOUD_NAME": "dhy82ujzr",
+        "PROFILE_UPLOAD_PRESET": "profile-images",
+        "PROFILE_CLOUD_NAME": "dtxiiiz9i",
+        "BACKEND_URL": "https://fashionx-service.vercel.app"
+      }
     }
   },
   "submit": {

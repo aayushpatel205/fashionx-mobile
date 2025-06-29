@@ -1,6 +1,7 @@
-
 import axios from "axios";
-import { BACKEND_URL } from "@env";
+import Constants from "expo-constants";
+const BACKEND_URL =
+  Constants.manifest.extra.BACKEND_URL || process.env.BACKEND_URL;
 
 const PORT = 8002;
 

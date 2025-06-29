@@ -1,10 +1,16 @@
 import axios from "axios";
-import {
-  PRODUCT_UPLOAD_PRESET,
-  PRODUCT_CLOUD_NAME,
-  PROFILE_UPLOAD_PRESET,
-  PROFILE_CLOUD_NAME,
-} from "@env";
+import Constants from "expo-constants";
+
+const PRODUCT_UPLOAD_PRESET =
+  Constants.manifest.extra.PRODUCT_UPLOAD_PRESET ||
+  process.env.PRODUCT_UPLOAD_PRESET;
+const PRODUCT_CLOUD_NAME =
+  Constants.manifest.extra.PRODUCT_CLOUD_NAME || process.env.PRODUCT_CLOUD_NAME;
+const PROFILE_UPLOAD_PRESET =
+  Constants.manifest.extra.PROFILE_UPLOAD_PRESET ||
+  process.env.PROFILE_UPLOAD_PRESET;
+const PROFILE_CLOUD_NAME =
+  Constants.manifest.extra.PROFILE_CLOUD_NAME || process.env.PROFILE_CLOUD_NAME;
 
 export const uploadImage = async (image, bucketName, userId = null) => {
   const formData = new FormData();
