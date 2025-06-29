@@ -19,6 +19,7 @@
 - **Express.js**
 - **MongoDB**
 - **React Navigation**
+- **Fuse.js**
 - **Custom Backend API (same as Fashion X website)**
 
 ---
@@ -29,6 +30,7 @@
 - 📸 **Hero Image** at the top for featured collections or offers.
 - 🆕 **Latest Arrivals Section** for newly added products.
 - 🔍 **SearchBar** at the top to quickly find products.
+  - Implements **fuzzy search using [Fuse.js](https://fusejs.io/)** for flexible, typo-tolerant, and relevance-based product searching.
 - 🧭 **Bottom Navigation Tab** for navigating between:
   - Home
   - Favourites
@@ -111,6 +113,3 @@
 ## 📦📥 APK Release
 
 📱 **Download the latest APK build from the [Releases Section](https://github.com/aayushpatel205/fashionx-mobile/releases/tag/v1.0.0)**.
-
----
-
